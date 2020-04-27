@@ -1,0 +1,19 @@
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: blue;
+}
+
+.faIcon {
+  font-family: "FontAwesome";
+  font-size: 10rem;
+  font-weight: 900;
+}
