@@ -1,0 +1,45 @@
+
+$nice-blue: #483D8B;
+$off-white: #f8f8f8;
+$off-black: #333;
+$green: #57b846;
+$red: red;
+$error-text: #f44336;
+$success-text: #4caf50;
+
+$dark-semi-transparent: rgba(0,0,0,0.7);
+$btn-shadow:0 .125em rgba(255,255,255,.4), inset 0 .063em   rgba(255,255,255,.4), inset 0 -0.188em #804FAD;
+
+// @mixin btn-shadow-theme {
+//   background-color: #9A68C7;
+//   border-color: #743EA5;
+// }
+
+@mixin set-nav-btn($color) {
+  background-color: darken($color, 10%);
+  box-shadow: $btn-shadow;
+  transition: 0.2s linear all;
+  &:hover {
+    background-color: darken($color, 20%);
+  }
+}
+
+
+
+$xs: 0.5rem;
+$normal: 1rem;
+$sm: 1.5rem;
+$md: 2rem;
+$md2: 2.5rem; 
+$lg: 3rem;
+$xlg: 5rem;
+$xxlg: 7rem;
+
+// Buttons
+$button-radius: 30px;
+
+// Breakpoints
+$lg-breakpoint: 1024px;
+$md-breakpoint: 768px;
+$sm-breakpoint: 641px;
+$xs-breakpoint: 480px;

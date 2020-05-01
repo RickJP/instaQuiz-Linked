@@ -9,16 +9,16 @@ const Home = () => (
       <section>
         <div>
         {/* <FontAwesomeIcon icon={['fab', 'apple']} /> */}
-        <span><FontAwesomeIcon icon={['fab', 'accusoft']} className="faIcon" /></span>
-        <h1>Quiz App</h1>
+        <span><FontAwesomeIcon icon={['fab', 'accusoft']} className="appLogo" /></span>
+        <h1 className="quiz-title">Quiz App</h1>
         <div className="play-button-container">
           <ul>
-            <li><Link to='/play/instructions'></Link></li>
+            <li><Link className="play-button" to='/play/instructions'>Play</Link></li>
           </ul>
         </div>
         <div className="auth-container">
-          <Link to='/login'>Login</Link>
-          <Link to='/register'>Register</Link>
+          <Link className="auth-buttons" id="login-button" to='/login'>Login</Link>
+          <Link className="auth-buttons" id="signup-button" to='/register'>Register</Link>
         </div>
         </div>
       </section>

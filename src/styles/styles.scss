@@ -1,5 +1,8 @@
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome";
+@import './base/settings.scss';
+@import './base/base.scss';
+@import './components/home.scss';
+@import './components/play.scss';
+@import './components/quiz-instructions.scss';
 
 
 * {
@@ -9,7 +12,7 @@ $fa-font-path: "~font-awesome/fonts";
 }
 
 body {
-  background: blue;
+  background: $off-white
 }
 
 .faIcon {
