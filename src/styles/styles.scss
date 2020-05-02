@@ -1,22 +1,23 @@
+<<<<<<< HEAD
 @import './base/settings.scss';
 @import './base/base.scss';
 @import './components/home.scss';
 @import './components/play.scss';
 @import './components/quiz-instructions.scss';
+=======
+@import './base/settings';
+@import './base/base';
+@import './components/home';
+@import './components/_quiz-instructions';
+@import './components/_play';
+>>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
+<<<<<<< HEAD
 body {
   background: $off-white
 }
+=======
+>>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 
-.faIcon {
-  font-family: "FontAwesome";
-  font-size: 10rem;
-  font-weight: 900;
-}

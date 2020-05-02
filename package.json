@@ -11,16 +11,28 @@
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
     "classnames": "^2.2.6",
+    "contentful": "^7.14.4",
     "font-awesome": "^4.7.0",
+<<<<<<< HEAD
+=======
+    "i": "^0.3.6",
+    "install": "^0.13.0",
+>>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     "materialize-css": "^1.0.0-rc.2",
     "node-sass": "^4.14.0",
+    "npm": "^6.14.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
     "react-helmet-async": "^1.0.5",
+<<<<<<< HEAD
+=======
+    "react-materialize": "^3.8.10",
+>>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     "react-router": "^3.2.6",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-side-effect": "^2.1.0",
     "tsutils": "^3.17.1",
     "typescript": "^3.8.3"
   },
