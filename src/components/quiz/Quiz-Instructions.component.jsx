@@ -45,16 +45,11 @@ const QuizInstructions = () => (
           <li>The timer starts as soon as the quiz loads.</li>
         </ul>
         <div className="btn-container">
-<<<<<<< HEAD
            {/* <div><span className="back-to-main-menu-btn"><Link to="/">Go back</Link></span></div>
            <div><span className="play-quiz-btn"><Link to="/play/quiz">Start</Link></span></div> */}
 
            <Link className="back-to-main-menu-btn" to="/">Go back</Link>
            <Link className="play-quiz-btn" to="/play/quiz">Start</Link>
-=======
-           <div><span className="back-to-main-menu-btn"><Link to="/">Go back</Link></span></div>
-           <div><span className="play-quiz-btn"><Link to="/play/quiz">Start</Link></span></div>
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
         </div>
         
       </div>

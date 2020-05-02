@@ -3,12 +3,8 @@
   border-radius: 5px;
   margin: $lg $sm;
   padding: $sm $lg;
-<<<<<<< HEAD
   background: $off-white;
   font-size: 1.2rem;
-=======
-
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 
   #main-list, #sublist {
     list-style: none;
@@ -19,10 +15,7 @@
     font-size: $md;
     text-align: center;
     padding: 20px;
-<<<<<<< HEAD
     font-family: 'Fredoka One';
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
   }
 
   .lifeline {
@@ -50,11 +43,6 @@
     margin: 0 auto $sm auto;
     padding: $xlg $lg 0 0;
     width: 80%;
-<<<<<<< HEAD
-=======
-    // justify-content: flex-start;
-    //  flex-wrap: space-around;
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     display: flex;
     justify-content: space-between;
     
@@ -63,19 +51,12 @@
       border: none;
       color: $off-white;
       cursor: pointer;
-<<<<<<< HEAD
       margin-right: $md;
       padding: $md $sm;
       text-decoration: none;  
       font-family: 'Fredoka One';  
        
       width: 130px;
-=======
-      font-family: 'Roboto';
-      margin-right: $md;
-      padding: $md $sm;
-      text-decoration: none;     
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     }
 
     .back-to-main-menu-btn {

@@ -7,7 +7,6 @@ import {isEmpty} from '../../utils/is-empty';
 
 import M from 'materialize-css';
 
-<<<<<<< HEAD
 import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
 import buttonClickSound from '../../assets/audio/buttonClick.wav';
@@ -15,14 +14,6 @@ import buttonClickSound from '../../assets/audio/buttonClick.wav';
 
 const helmetContext = {};
  
-=======
-const helmetContext = {};
-<<<<<<< HEAD
-
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
-=======
- 
->>>>>>> 79e506e... ammended email
 class Play extends Component {
   constructor(props) {
     super(props);
@@ -65,33 +56,64 @@ class Play extends Component {
         currentQuestion,
         prevQuestion,
         nextQuestion,
-<<<<<<< HEAD
         answer,
         numOfQuestions: questions.length
-=======
-        answer
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
       })
     }
   };
 
   handleOptionClick = (e) => {
     if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-<<<<<<< HEAD
       document.getElementById('correctAnswerSound').play();
       this.correctAnswer();
     } else {
       document.getElementById('wrongAnswerSound').play();
-=======
-      this.correctAnswer();
-    } else {
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
       this.wrongAnswer();
     }
   }
 
-<<<<<<< HEAD
-  handleButtonClick = () => {
+  handlePrevButton = () => {
+    if (this.state.prevQuestion !== undefined) {
+      this.setState(prevState => ({
+        currentQuestionIndex: prevState.currentQuestionIndex - 1
+      }), () => {
+        this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.nextQuestion, this.state.prevQuestion);
+      })
+    }
+  }
+
+  handleNextButton = () => {
+    if (this.state.nextQuestion !== undefined) {
+      this.setState(prevState => ({
+        currentQuestionIndex: prevState.currentQuestionIndex + 1
+      }), () => {
+        this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.nextQuestion, this.state.prevQuestion);
+      })
+    }
+  }
+
+  handleQuitButton = () => {
+    if (window.confirm(`Do you really want to quit`)) {
+      this.props.history.push('/');
+    }
+  }
+
+ 
+
+  handleButtonClick = (e) => {
+    console.log(e.target.id);
+    switch(e.target.id) {
+      case 'next-button':
+        this.handleNextButton();
+        break;
+      case 'previous-button':
+        this.handlePrevButton();
+        break;
+      case 'quit-button':
+        this.handleQuitButton();
+        break;
+      default: break;
+    }
     this.playButtonSound();
   }
 
@@ -99,8 +121,6 @@ class Play extends Component {
     document.getElementById('buttonClickSound').play();
   }
 
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
   correctAnswer = () => {
     M.toast({
       html: 'Correct Answer!',
@@ -134,11 +154,7 @@ class Play extends Component {
   }
 
   render() {
-<<<<<<< HEAD
     const { currentQuestion, numOfQuestions, currentQuestionIndex} = this.state;
-=======
-    const { currentQuestion } = this.state;
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 
     
     return (
@@ -148,14 +164,11 @@ class Play extends Component {
             {' '}
             <title>Quiz Page</title>
           </Helmet>
-<<<<<<< HEAD
           <Fragment>
               <audio id="correctAnswerSound" src={correctAnswerSound}></audio>
               <audio  id="wrongAnswerSound" src={wrongAnswerSound}></audio>
               <audio  id="buttonClickSound" src={buttonClickSound}></audio>
             </Fragment>
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
           <div className='questions'>
             <h2>Quiz Mode</h2>
             <div className='lifeline-container'>
@@ -179,11 +192,7 @@ class Play extends Component {
               <p>
                 <span>
               {' '}
-<<<<<<< HEAD
     <span className="lifeline question-counter">{currentQuestionIndex + 1} / {numOfQuestions}</span>
-=======
-                <span className="lifeline question-counter">1 / 15</span>
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
                 </span>
               </p>
               <p>
@@ -206,15 +215,9 @@ class Play extends Component {
               <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionD}</p>
             </div>
             <div className='btn-container'>
-<<<<<<< HEAD
-              <button onClick={this.handleButtonClick} >Previous</button>
-              <button onClick={this.handleButtonClick} >Next</button>
-              <button onClick={this.handleButtonClick} >Quit</button>
-=======
-              <button>Previous</button>
-              <button>Next</button>
-              <button>Quit</button>
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
+              <button id="previous-button" onClick={this.handleButtonClick} >Previous</button>
+              <button  id="next-button" onClick={this.handleButtonClick} >Next</button>
+              <button  id="quit-button" onClick={this.handleButtonClick} >Quit</button>
             </div>   
           </div> {/* Questions */}
         </Fragment>

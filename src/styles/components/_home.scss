@@ -7,51 +7,33 @@
   justify-content: space-around;
   height: 100vh;
   width: 100vw;
-<<<<<<< HEAD
   
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 
   section {
     background-color: $dark-semi-transparent;
     border-radius: 5px;
-<<<<<<< HEAD
     padding: $md $md;
     height: 90%;
     width: 45%;
 
-=======
-    padding: 0 $md;
-    height: 70%;
-    width: 35%;
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     // min-width: 200px;
     // max-width: 300px;
 
     .appLogo {
-<<<<<<< HEAD
 
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
       font-family: "FontAwesome";
       font-size: 6rem;
       font-weight: 900;
       color: $nice-blue;
-<<<<<<< HEAD
       display: inline-block;
       width: 100%;
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
     }
 
     .quiz-title {
       font-family: 'Fredoka One';
       font-size: $md2;
       color: $off-white;
-<<<<<<< HEAD
       color: white;
-=======
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
       text-align: center;
     }
 
@@ -139,7 +121,6 @@
 
 @media (max-width: $md-breakpoint) {
   #home section {
-<<<<<<< HEAD
     padding: $xlg $lg;
     width: 100%;
     height: 100%;
@@ -149,10 +130,4 @@
     padding: $lg;
 
   }
-=======
-    padding: $normal;
-    width: 100%;
-    height: 100%;
-  }
->>>>>>> 689e887... create instructions, home & play components, add styling; Now adds questions allows options to be selected; displays next question
 }
