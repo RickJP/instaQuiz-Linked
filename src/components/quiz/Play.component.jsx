@@ -33,6 +33,8 @@ class Play extends Component {
       usedFiftyFifty: false,
       time: {},
       prevRandomNo: [],
+      prevButtonDisabled: true,
+      nextButtonDisabled: false
     };
     this.interval = null;
   }
@@ -75,6 +77,7 @@ class Play extends Component {
         },
         () => {
           this.showOptions();
+          this.handleDisableButton();
         }
       );
     }
@@ -331,6 +334,18 @@ generateRandomNumber = (maxValue) => {
     }, 1000);
   }
 
+  handleDisableButton = () => {
+    if (this.state.prevQuestion === undefined || this.state.currentQuestionIndex === 0) {
+      this.setState({ prevButtonDisabled: true })
+    } else {
+      this.setState({ prevButtonDisabled: false })
+    }
+    if (this.state.nextQuestion === undefined || this.state.currentQuestionIndex + 1 === this.state.numOfQuestions) {
+      this.setState({ nextButtonDisabled: true })
+      this.setState({ prevButtonDisabled: true })
+    }
+  }
+
   render() {
     const {
       currentQuestion, numOfQuestions, currentQuestionIndex,
@@ -406,10 +421,10 @@ generateRandomNumber = (maxValue) => {
               </p>
             </div>
             <div className="btn-container">
-              <button id="previous-button" onClick={this.handleButtonClick}>
+              <button id="previous-button" disabled={this.state.prevButtonDisabled} onClick={this.handleButtonClick}>
                 Previous
               </button>
-              <button id="next-button" onClick={this.handleButtonClick}>
+              <button id="next-button"  disabled={this.state.nextButtonDisabled} onClick={this.handleButtonClick}>
                 Next
               </button>
               <button id="quit-button" onClick={this.handleButtonClick}>

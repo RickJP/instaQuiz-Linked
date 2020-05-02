@@ -69,10 +69,12 @@
     color: $off-white;
     cursor: pointer;
     margin: $md auto;
-    padding: $normal;
+    padding: $md;
     transition: .3s linear all;
     text-align: center;
     width: 90%;
+    height: 6rem;
+    
 
     &:hover {
       background-color: darken($nice-blue, 20%);
@@ -96,12 +98,27 @@
       padding: $xs $sm;
     }
 
+    // Previous Button
     button:first-child {
       @include set-nav-btn($nice-blue);
+
+      &:disabled {
+        background-color: #333;
+        color: grey;
+        box-shadow: none;
+      }
     }
+    // Next Button
     button:nth-child(2) {
       @include set-nav-btn($green);
+
+      &:disabled {
+        background-color: #333;
+        color: grey;
+        box-shadow: none;
+      }
     }
+    // Quit Button
     button:nth-child(3) {
       @include set-nav-btn($red)
     }
