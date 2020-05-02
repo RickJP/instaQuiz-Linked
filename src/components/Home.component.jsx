@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 const Home = () => (
   <Fragment>
     <title>Insta Quiz</title>
-    <div id='home'>
+    <div id='home' className="noselect">
       <section>
         <div>
         {/* <FontAwesomeIcon icon={['fab', 'apple']} /> */}
         <span><FontAwesomeIcon icon={['fab', 'accusoft']} className="appLogo" /></span>
-        <h1 className="quiz-title">Quiz App</h1>
+        <h1 className="quiz-title">InstaQuiz</h1>
         <div className="play-button-container">
           <ul>
             <li><Link className="play-button" to='/play/instructions'>Play</Link></li>

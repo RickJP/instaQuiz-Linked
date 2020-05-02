@@ -11,15 +11,22 @@
     font-weight: lighter;
   }
 
-  .lifeline {
+  .lifeline-icon {
+    cursor: pointer;
+
+    // @include brighten-icon($color);
+  }
+
+  .lifeline-no {
     position: relative;
+    cursor: pointer;
     top: -6px;
   }
 
-  .lifeline-container {
+  .lifeline-container, .info-container {
     display: flex;
     justify-content: space-between;
-
+  
     .question-counter {
       position: relative;
       top: 10px;

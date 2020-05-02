@@ -11,9 +11,8 @@ import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
 import buttonClickSound from '../../assets/audio/buttonClick.wav';
 
-
 const helmetContext = {};
- 
+
 class Play extends Component {
   constructor(props) {
     super(props);
@@ -32,19 +31,28 @@ class Play extends Component {
       hints: 5,
       fiftyFifty: 2,
       usedFiftyFifty: false,
-      time: {}
+      time: {},
+      prevRandomNo: []
     };
   }
 
   componentDidMount() {
-    const { questions, currentQuestion, prevQuestion, nextQuestion } = this.state;
-    this.displayQuestions(questions, currentQuestion, prevQuestion, nextQuestion);
+    const {questions, currentQuestion, prevQuestion, nextQuestion} = this.state;
+    this.displayQuestions(
+      questions,
+      currentQuestion,
+      prevQuestion,
+      nextQuestion
+    );
   }
 
-
-
-  displayQuestions = (questions = this.state.questions, currentQuestion, nextQuestion, prevQuestion) => {
-    let { currentQuestionIndex } = this.state;
+  displayQuestions = (
+    questions = this.state.questions,
+    currentQuestion,
+    nextQuestion,
+    prevQuestion
+  ) => {
+    let {currentQuestionIndex} = this.state;
 
     if (!isEmpty(questions)) {
       currentQuestion = questions[currentQuestionIndex];
@@ -57,8 +65,12 @@ class Play extends Component {
         prevQuestion,
         nextQuestion,
         answer,
-        numOfQuestions: questions.length
-      })
+        numOfQuestions: questions.length,
+        prevRandomNo: []
+      }, () => {
+        this.showOptions();
+        
+      });
     }
   };
 
@@ -70,39 +82,92 @@ class Play extends Component {
       document.getElementById('wrongAnswerSound').play();
       this.wrongAnswer();
     }
-  }
+  };
 
   handlePrevButton = () => {
     if (this.state.prevQuestion !== undefined) {
-      this.setState(prevState => ({
-        currentQuestionIndex: prevState.currentQuestionIndex - 1
-      }), () => {
-        this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.nextQuestion, this.state.prevQuestion);
-      })
+      this.setState(
+        (prevState) => ({
+          currentQuestionIndex: prevState.currentQuestionIndex - 1,
+        }),
+        () => {
+          this.displayQuestions(
+            this.state.questions,
+            this.state.currentQuestion,
+            this.state.nextQuestion,
+            this.state.prevQuestion
+          );
+        }
+      );
     }
-  }
+  };
 
   handleNextButton = () => {
     if (this.state.nextQuestion !== undefined) {
-      this.setState(prevState => ({
-        currentQuestionIndex: prevState.currentQuestionIndex + 1
-      }), () => {
-        this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.nextQuestion, this.state.prevQuestion);
-      })
+      this.setState(
+        (prevState) => ({
+          currentQuestionIndex: prevState.currentQuestionIndex + 1,
+        }),
+        () => {
+          this.displayQuestions(
+            this.state.questions,
+            this.state.currentQuestion,
+            this.state.nextQuestion,
+            this.state.prevQuestion
+          );
+        }
+      );
     }
-  }
+  };
 
   handleQuitButton = () => {
     if (window.confirm(`Do you really want to quit`)) {
       this.props.history.push('/');
     }
+  };
+
+  showOptions = () => {
+    const options = Array.from(document.querySelectorAll('.option'));
+
+    options.forEach((option) => {
+      option.style.visibility = 'visible';
+    });
   }
 
- 
+  handleHints = () => {
+    if (this.state.hints > 0) {
+      const options = Array.from(document.querySelectorAll('.option'));
+    let indexOfAnswer;
+
+    options.forEach((option, index) => {
+      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
+        indexOfAnswer = index;
+      }
+    });
+
+    while (true) {
+      const randNum = Math.round(Math.random() * 3);
+      if (randNum !== indexOfAnswer && !this.state.prevRandomNo.includes(randNum)) {
+        options.forEach((option, index) => {
+          if (index === randNum) {
+            option.style.visibility = 'hidden';
+            this.setState((prevState) => ({
+              hints: prevState.hints - 1,
+              prevRandomNo: prevState.prevRandomNo.concat(randNum)
+            }));
+          }
+        });
+        break;
+      }
+      if (this.state.prevRandomNo.length >= 3) break;
+    }
+    }
+    
+  };
 
   handleButtonClick = (e) => {
     console.log(e.target.id);
-    switch(e.target.id) {
+    switch (e.target.id) {
       case 'next-button':
         this.handleNextButton();
         break;
@@ -112,51 +177,67 @@ class Play extends Component {
       case 'quit-button':
         this.handleQuitButton();
         break;
-      default: break;
+      default:
+        break;
     }
     this.playButtonSound();
-  }
+  };
 
   playButtonSound = () => {
     document.getElementById('buttonClickSound').play();
-  }
+  };
 
   correctAnswer = () => {
     M.toast({
       html: 'Correct Answer!',
       classes: 'toast-valid',
-      displayLength: 1500
+      displayLength: 1500,
     });
-    this.setState((prevState) => ({
-      score: prevState.score + 1,
-      correctAnswers: prevState.correctAnswers + 1,
-      currentQuestionIndex: prevState.currentQuestionIndex + 1,
-      numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1
-    }), () => {
-      this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.prevQuestion, this.state.nextQuestion);
-    })
-  }
+    this.setState(
+      (prevState) => ({
+        score: prevState.score + 1,
+        correctAnswers: prevState.correctAnswers + 1,
+        currentQuestionIndex: prevState.currentQuestionIndex + 1,
+        numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+      }),
+      () => {
+        this.displayQuestions(
+          this.state.questions,
+          this.state.currentQuestion,
+          this.state.prevQuestion,
+          this.state.nextQuestion
+        );
+      }
+    );
+  };
 
   wrongAnswer = () => {
     navigator.vibrate(800);
     M.toast({
       html: 'Wrong Answer!',
       classes: 'toast-invalid',
-      displayLength: 1500
+      displayLength: 1500,
     });
-    this.setState((prevState) => ({
-      wrongAnswers: prevState.wrongAnswers + 1,
-      currentQuestionIndex: prevState.currentQuestionIndex + 1,
-      numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-    }), () => {
-      this.displayQuestions(this.state.questions, this.state.currentQuestion, this.state.prevQuestion, this.state.nextQuestion);
-    })
-  }
+    this.setState(
+      (prevState) => ({
+        wrongAnswers: prevState.wrongAnswers + 1,
+        currentQuestionIndex: prevState.currentQuestionIndex + 1,
+        numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+      }),
+      () => {
+        this.displayQuestions(
+          this.state.questions,
+          this.state.currentQuestion,
+          this.state.prevQuestion,
+          this.state.nextQuestion
+        );
+      }
+    );
+  };
 
   render() {
-    const { currentQuestion, numOfQuestions, currentQuestionIndex} = this.state;
+    const {currentQuestion, numOfQuestions, currentQuestionIndex} = this.state;
 
-    
     return (
       <HelmetProvider context={helmetContext}>
         <Fragment>
@@ -165,61 +246,85 @@ class Play extends Component {
             <title>Quiz Page</title>
           </Helmet>
           <Fragment>
-              <audio id="correctAnswerSound" src={correctAnswerSound}></audio>
-              <audio  id="wrongAnswerSound" src={wrongAnswerSound}></audio>
-              <audio  id="buttonClickSound" src={buttonClickSound}></audio>
-            </Fragment>
-          <div className='questions'>
+            <audio id="correctAnswerSound" src={correctAnswerSound}></audio>
+            <audio id="wrongAnswerSound" src={wrongAnswerSound}></audio>
+            <audio id="buttonClickSound" src={buttonClickSound}></audio>
+          </Fragment>
+          <div className="questions noselect">
             <h2>Quiz Mode</h2>
-            <div className='lifeline-container'>
+            <div className="lifeline-container">
+              <p>
+                {' '}
+                <StarHalf
+                  onClick={this.handleFiftyFify}
+                  className="lifeline-icon"
+                  style={{fontSize: 24, color: 'red'}}
+                />
+                <span className="lifeline-no">{this.state.fiftyFifty}</span>
+              </p>
+              <p>
+                <WbIncandescent
+                  onClick={this.handleHints}
+                  className="lifeline-icon"
+                  style={{fontSize: 24, color: 'orange'}}
+                />
+
+    <span className="lifeline-no">{this.state.hints}</span>
+              </p>
+            </div>{' '}
+            {/* lifeline-container */}
+            <div className="info-container">
               <p>
                 <span>
                   {' '}
-                  <StarHalf style={{fontSize: 24, color: 'red'}} />
-                </span>
-                <span className='lifeline'>2</span>
-              </p>
-              <p>
-                <span>
-                  {' '}
-                  <WbIncandescent style={{fontSize: 24, color: 'orange'}} />
-                </span>
-                <span className='lifeline'>5</span>
-              </p>
-            </div>  {/* lifeline-container */}
-
-            <div className='lifeline-container'>
-              <p>
-                <span>
-              {' '}
-    <span className="lifeline question-counter">{currentQuestionIndex + 1} / {numOfQuestions}</span>
+                  <span className="question-counter">
+                    {currentQuestionIndex + 1} / {numOfQuestions}
+                  </span>
                 </span>
               </p>
               <p>
                 <span>
                   {' '}
-                  <span className="lifeline">2:15</span> 
-
+                  <span>2:15</span>
                 </span>
-                <AvTimer style={{fontSize: 24, color: 'blue'}} />
+                <AvTimer
+                  onClick={this.handleHints}
+                  className="lifeline-icon"
+                  style={{fontSize: 24, color: 'blue'}}
+                />
               </p>
-            </div>  {/* lifeline-container */}
-
-          <h4 className='question'>{currentQuestion.question}</h4>
-            <div className='options-container'>
-              <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionA}</p>
-              <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionB}</p>
+            </div>{' '}
+            {/* lifeline-container */}
+            <h4 className="question">{currentQuestion.question}</h4>
+            <div className="options-container">
+              <p onClick={this.handleOptionClick} className="option">
+                {currentQuestion.optionA}
+              </p>
+              <p onClick={this.handleOptionClick} className="option">
+                {currentQuestion.optionB}
+              </p>
             </div>
-            <div className='options-container'>
-              <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionC}</p>
-              <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionD}</p>
+            <div className="options-container">
+              <p onClick={this.handleOptionClick} className="option">
+                {currentQuestion.optionC}
+              </p>
+              <p onClick={this.handleOptionClick} className="option">
+                {currentQuestion.optionD}
+              </p>
             </div>
-            <div className='btn-container'>
-              <button id="previous-button" onClick={this.handleButtonClick} >Previous</button>
-              <button  id="next-button" onClick={this.handleButtonClick} >Next</button>
-              <button  id="quit-button" onClick={this.handleButtonClick} >Quit</button>
-            </div>   
-          </div> {/* Questions */}
+            <div className="btn-container">
+              <button id="previous-button" onClick={this.handleButtonClick}>
+                Previous
+              </button>
+              <button id="next-button" onClick={this.handleButtonClick}>
+                Next
+              </button>
+              <button id="quit-button" onClick={this.handleButtonClick}>
+                Quit
+              </button>
+            </div>
+          </div>{' '}
+          {/* Questions */}
         </Fragment>
       </HelmetProvider>
     );

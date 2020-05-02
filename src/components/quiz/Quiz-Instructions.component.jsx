@@ -10,7 +10,7 @@ const QuizInstructions = () => (
   <HelmetProvider context={helmetContext}>
     <Fragment>
       <Helmet><title>Quiz Instructions - Quiz App</title></Helmet>
-      <div className="instructions container">
+      <div className="instructions">
         <h1>How to Play the Quiz</h1>
         <p>Ensure you read this guide from start to finish.</p>
         <ul className="browser-default" id="main-list">
