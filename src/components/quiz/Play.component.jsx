@@ -266,7 +266,7 @@ generateRandomNumber = (maxValue) => {
     M.toast({
       html: 'Correct Answer!',
       classes: 'toast-valid',
-      displayLength: 1500,
+      displayLength: 1000,
     });
     this.setState(
       (prevState) => ({
@@ -296,7 +296,7 @@ generateRandomNumber = (maxValue) => {
     M.toast({
       html: 'Wrong Answer!',
       classes: 'toast-invalid',
-      displayLength: 1500,
+      displayLength: 1000,
     });
     this.setState(
       (prevState) => ({
@@ -373,7 +373,7 @@ generateRandomNumber = (maxValue) => {
     const playerStats = {
       score: state.score,
       numOfQuestions: state.numOfQuestions,
-      numberOfAnsweredQuestions: state.numberOfAnsweredQuestions,
+      numberOfAnsweredQuestions: (state.correctAnswers + state.wrongAnswers),
       correctAnswers: state.correctAnswers,
       wrongAnswers: state.wrongAnswers,
       fiftyFiftyUsed: 2 - state.fiftyFifty,
@@ -381,8 +381,8 @@ generateRandomNumber = (maxValue) => {
     };
     console.log(playerStats);
     setTimeout(() => {
-      this.props.history.push('/');
-    }, 1000)
+      this.props.history.push('/play/quizsummary', playerStats);
+    }, 2000)
   }
 
   render() {
