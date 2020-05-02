@@ -32,18 +32,21 @@ class Play extends Component {
       fiftyFifty: 2,
       usedFiftyFifty: false,
       time: {},
-      prevRandomNo: []
+      prevRandomNo: [],
     };
+    this.interval = null;
   }
 
   componentDidMount() {
     const {questions, currentQuestion, prevQuestion, nextQuestion} = this.state;
+
     this.displayQuestions(
       questions,
       currentQuestion,
       prevQuestion,
       nextQuestion
     );
+    this.startTimer();
   }
 
   displayQuestions = (
@@ -55,22 +58,25 @@ class Play extends Component {
     let {currentQuestionIndex} = this.state;
 
     if (!isEmpty(questions)) {
+      questions = this.state.questions;
       currentQuestion = questions[currentQuestionIndex];
       prevQuestion = questions[currentQuestionIndex - 1];
       nextQuestion = questions[currentQuestionIndex + 1];
       const answer = currentQuestion.answer;
 
-      this.setState({
-        currentQuestion,
-        prevQuestion,
-        nextQuestion,
-        answer,
-        numOfQuestions: questions.length,
-        prevRandomNo: []
-      }, () => {
-        this.showOptions();
-        
-      });
+      this.setState(
+        {
+          currentQuestion,
+          prevQuestion,
+          nextQuestion,
+          answer,
+          numOfQuestions: questions.length,
+          prevRandomNo: [],
+        },
+        () => {
+          this.showOptions();
+        }
+      );
     }
   };
 
@@ -132,35 +138,91 @@ class Play extends Component {
     options.forEach((option) => {
       option.style.visibility = 'visible';
     });
-  }
+
+    this.setState({
+      usedFiftyFifty: false,
+    });
+  };
 
   handleHints = () => {
     if (this.state.hints > 0) {
       const options = Array.from(document.querySelectorAll('.option'));
-    let indexOfAnswer;
+      let indexOfAnswer;
 
+      options.forEach((option, index) => {
+        if (
+          option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()
+        ) {
+          indexOfAnswer = index;
+        }
+      });
+
+      while (true) {
+        const randNum = Math.round(Math.random() * 3);
+        if (
+          randNum !== indexOfAnswer &&
+          !this.state.prevRandomNo.includes(randNum)
+        ) {
+          options.forEach((option, index) => {
+            if (index === randNum) {
+              option.style.visibility = 'hidden';
+              this.setState((prevState) => ({
+                hints: prevState.hints - 1,
+                prevRandomNo: prevState.prevRandomNo.concat(randNum),
+              }));
+            }
+          });
+          break;
+        }
+        if (this.state.prevRandomNo.length >= 3) break;
+      }
+    }
+  };
+
+
+  getIndexOfAnswer = () => {
+    let indexOut;
+
+    const options = document.querySelectorAll('.option')
     options.forEach((option, index) => {
-      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-        indexOfAnswer = index;
+      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase() ) {
+        indexOut = index;
       }
     });
+    return indexOut;
+}
 
-    while (true) {
-      const randNum = Math.round(Math.random() * 3);
-      if (randNum !== indexOfAnswer && !this.state.prevRandomNo.includes(randNum)) {
-        options.forEach((option, index) => {
-          if (index === randNum) {
-            option.style.visibility = 'hidden';
-            this.setState((prevState) => ({
-              hints: prevState.hints - 1,
-              prevRandomNo: prevState.prevRandomNo.concat(randNum)
-            }));
-          }
-        });
-        break;
+
+generateRandomNumber = (maxValue) => {
+  return Math.round(Math.random() * maxValue);
+};
+
+  handleFiftyFify = () => {
+    const options = document.querySelectorAll('.option')
+     
+    // if there are some fifty-fifties left and one has not been used
+    if (this.state.fiftyFifty > 0 && this.state.usedFiftyFifty === false) {
+      const indexOfAnswer = this.getIndexOfAnswer();
+      let randomNumber;
+      let randomNumbers = [];
+      let count = 0;
+
+      do {
+        randomNumber = this.generateRandomNumber(3);
+        if (randomNumber !== indexOfAnswer && !randomNumbers.includes(randomNumber)) {
+          console.log(randomNumber);
+          randomNumbers.push(randomNumber);
+          count ++;
+        }
+      } while (count < 2);
+
+      options.forEach((option, index) => {
+      if (randomNumbers.includes(index)) {
+        option.style.visibility = 'hidden';
       }
-      if (this.state.prevRandomNo.length >= 3) break;
-    }
+     });
+
+     this.setState((prevState) => ({ usedFiftyFifty: true, fiftyFifty: prevState.fiftyFifty - 1}));
     }
     
   };
@@ -183,9 +245,7 @@ class Play extends Component {
     this.playButtonSound();
   };
 
-  playButtonSound = () => {
-    document.getElementById('buttonClickSound').play();
-  };
+  playButtonSound = () => {};
 
   correctAnswer = () => {
     M.toast({
@@ -235,8 +295,47 @@ class Play extends Component {
     );
   };
 
+  selectedTimeToMS = (mins = 1, secs = 0) => {
+    return ((mins * 60) * 1000) + (secs * 1000);
+  }
+
+  startTimer = () => {
+    const countDownTime = Date.now() + this.selectedTimeToMS();
+    this.interval = setInterval(() => {
+      const now = new Date();
+      const distance = countDownTime - now;
+
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // if timer has finished
+      if (distance < 0) {
+        clearInterval(this.interval);
+        this.setState({
+          time: {
+            seconds: 0,
+            minutes: 0
+          }
+        }, () => {
+          alert('Quiz Finished');
+          this.props.history.push('/')
+        })
+      } else {
+        this.setState({
+          time: {
+            seconds,
+            minutes
+          }
+        })
+      }
+    }, 1000);
+  }
+
   render() {
-    const {currentQuestion, numOfQuestions, currentQuestionIndex} = this.state;
+    const {
+      currentQuestion, numOfQuestions, currentQuestionIndex,
+      time
+    } = this.state;
 
     return (
       <HelmetProvider context={helmetContext}>
@@ -257,59 +356,53 @@ class Play extends Component {
                 {' '}
                 <StarHalf
                   onClick={this.handleFiftyFify}
-                  className="lifeline-icon"
-                  style={{fontSize: 24, color: 'red'}}
+                  className="icons"
+                  id="fifty-fifty-icon"
                 />
                 <span className="lifeline-no">{this.state.fiftyFifty}</span>
               </p>
               <p>
+                {' '}
                 <WbIncandescent
                   onClick={this.handleHints}
-                  className="lifeline-icon"
-                  style={{fontSize: 24, color: 'orange'}}
+                  className="icons"
+                  id="hints-icon"
                 />
-
-    <span className="lifeline-no">{this.state.hints}</span>
+                <span className="lifeline-no">{this.state.hints}</span>
               </p>
-            </div>{' '}
-            {/* lifeline-container */}
+            </div>
+
             <div className="info-container">
               <p>
                 <span>
-                  {' '}
-                  <span className="question-counter">
+                  <span id="question-counter">
                     {currentQuestionIndex + 1} / {numOfQuestions}
                   </span>
                 </span>
               </p>
               <p>
                 <span>
-                  {' '}
-                  <span>2:15</span>
+    <span id="timer-no">{time.minutes}:{time.seconds}</span>
                 </span>
-                <AvTimer
-                  onClick={this.handleHints}
-                  className="lifeline-icon"
-                  style={{fontSize: 24, color: 'blue'}}
-                />
+                <AvTimer onClick={this.handleHints} id="timer-icon" />
               </p>
-            </div>{' '}
-            {/* lifeline-container */}
+            </div>
+
             <h4 className="question">{currentQuestion.question}</h4>
             <div className="options-container">
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.optionA}
+                {currentQuestion.A}
               </p>
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.optionB}
+                {currentQuestion.B}
               </p>
             </div>
             <div className="options-container">
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.optionC}
+                {currentQuestion.C}
               </p>
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.optionD}
+                {currentQuestion.D}
               </p>
             </div>
             <div className="btn-container">
@@ -330,5 +423,7 @@ class Play extends Component {
     );
   }
 }
+
+
 
 export default Play;

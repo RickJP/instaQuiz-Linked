@@ -11,15 +11,25 @@
     font-weight: lighter;
   }
 
-  .lifeline-icon {
+  .icons{
     cursor: pointer;
-
-    // @include brighten-icon($color);
+  }
+  #hints-icon {
+    @include style-icon(orange);
+  }
+  #fifty-fifty-icon {
+    @include style-icon(green);
+  }
+  #timer-icon {
+    margin-left: 1.2rem;
+    @include style-icon(blue);
+   
   }
 
   .lifeline-no {
+    font-size: 2rem;
     position: relative;
-    cursor: pointer;
+    margin-left: .5rem;
     top: -6px;
   }
 
@@ -27,11 +37,18 @@
     display: flex;
     justify-content: space-between;
   
-    .question-counter {
+    #question-counter {
       position: relative;
       top: 10px;
+      font-size: 2rem;
+    }
+    #timer-no {
+      position: relative;
+      font-size: 2rem;
+      top: -.5rem;
     }
   }
+ 
 
   .question {
     font-size: 1.5rem;

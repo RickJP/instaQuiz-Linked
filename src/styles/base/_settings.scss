@@ -24,11 +24,13 @@ $btn-shadow:0 .125em rgba(255,255,255,.4), inset 0 .063em   rgba(255,255,255,.4)
   }
 }
 
-@mixin brighten-icon($color) {
-  background-color: lighten($color, 10%);
+@mixin style-icon($color) {
+  font-size: 3rem;
+  color: darken($color, 10%);
   transition: 0.2s linear all;
   &:hover {
-    background-color: lighten($color, 30%);
+    color: lighten($color, 30%);
+    transform: scale(1.5);
   }
 }
 
