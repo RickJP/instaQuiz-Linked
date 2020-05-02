@@ -51,6 +51,10 @@ class Play extends Component {
     this.startTimer();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   displayQuestions = (
     questions = this.state.questions,
     currentQuestion,
@@ -264,12 +268,17 @@ generateRandomNumber = (maxValue) => {
         numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
       }),
       () => {
-        this.displayQuestions(
-          this.state.questions,
-          this.state.currentQuestion,
-          this.state.prevQuestion,
-          this.state.nextQuestion
-        );
+        if (this.state.nextQuestion === undefined) {
+          this.endQuiz();
+        } else {
+          this.displayQuestions(
+            this.state.questions,
+            this.state.currentQuestion,
+            this.state.prevQuestion,
+            this.state.nextQuestion
+          );
+        }
+        
       }
     );
   };
@@ -288,12 +297,17 @@ generateRandomNumber = (maxValue) => {
         numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
       }),
       () => {
-        this.displayQuestions(
-          this.state.questions,
-          this.state.currentQuestion,
-          this.state.prevQuestion,
-          this.state.nextQuestion
-        );
+        if (this.state.nextQuestion === undefined) {
+          this.endQuiz();
+        } else {
+          this.displayQuestions(
+            this.state.questions,
+            this.state.currentQuestion,
+            this.state.prevQuestion,
+            this.state.nextQuestion
+          );
+        }
+        
       }
     );
   };
@@ -320,8 +334,7 @@ generateRandomNumber = (maxValue) => {
             minutes: 0
           }
         }, () => {
-          alert('Quiz Finished');
-          this.props.history.push('/')
+          this.endQuiz();
         })
       } else {
         this.setState({
@@ -344,6 +357,24 @@ generateRandomNumber = (maxValue) => {
       this.setState({ nextButtonDisabled: true })
       this.setState({ prevButtonDisabled: true })
     }
+  }
+
+  endQuiz = () => {
+    alert('Quiz Ended!');
+    const { state } = this;
+    const playerStats = {
+      score: state.score,
+      numOfQuestions: state.numOfQuestions,
+      numberOfAnsweredQuestions: state.numberOfAnsweredQuestions,
+      correctAnswers: state.correctAnswers,
+      wrongAnswers: state.wrongAnswers,
+      fiftyFiftyUsed: 2 - state.fiftyFifty,
+      hintsUsed: 5 - state.hints
+    };
+    console.log(playerStats);
+    setTimeout(() => {
+      this.props.history.push('/');
+    }, 1000)
   }
 
   render() {
