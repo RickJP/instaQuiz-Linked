@@ -37,6 +37,9 @@ class Play extends Component {
       nextButtonDisabled: false
     };
     this.interval = null;
+    this.wrongSound = React.createRef();
+    this.correctSound = React.createRef();
+    this.buttonSound = React.createRef();
   }
 
   componentDidMount() {
@@ -89,12 +92,18 @@ class Play extends Component {
 
   handleOptionClick = (e) => {
     if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-      document.getElementById('correctAnswerSound').play();
+      //document.getElementById('correctAnswerSound').play();
+      this.correctSound.current.play();
       this.correctAnswer();
     } else {
-      document.getElementById('wrongAnswerSound').play();
+      //document.getElementById('wrongAnswerSound').play();
+      this.wrongSound.current.play();
       this.wrongAnswer();
     }
+  };
+
+  playButtonSound = () => {
+    this.buttonSound.current.play();
   };
 
   handlePrevButton = () => {
@@ -252,7 +261,6 @@ generateRandomNumber = (maxValue) => {
     this.playButtonSound();
   };
 
-  playButtonSound = () => {};
 
   correctAnswer = () => {
     M.toast({
@@ -391,9 +399,9 @@ generateRandomNumber = (maxValue) => {
             <title>Quiz Page</title>
           </Helmet>
           <Fragment>
-            <audio id="correctAnswerSound" src={correctAnswerSound}></audio>
-            <audio id="wrongAnswerSound" src={wrongAnswerSound}></audio>
-            <audio id="buttonClickSound" src={buttonClickSound}></audio>
+            <audio ref={this.correctSound} id="correctAnswerSound" src={correctAnswerSound}></audio>
+            <audio ref={this.wrongSound} id="wrongAnswerSound" src={wrongAnswerSound}></audio>
+            <audio ref={this.buttonSound} id="buttonClickSound" src={buttonClickSound}></audio>
           </Fragment>
           <div className="questions noselect">
             <h2>Quiz Mode</h2>
