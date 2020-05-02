@@ -7,6 +7,11 @@ import {isEmpty} from '../../utils/is-empty';
 
 import M from 'materialize-css';
 
+import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
+import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
+import buttonClickSound from '../../assets/audio/buttonClick.wav';
+
+
 const helmetContext = {};
  
 class Play extends Component {
@@ -51,17 +56,28 @@ class Play extends Component {
         currentQuestion,
         prevQuestion,
         nextQuestion,
-        answer
+        answer,
+        numOfQuestions: questions.length
       })
     }
   };
 
   handleOptionClick = (e) => {
     if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
+      document.getElementById('correctAnswerSound').play();
       this.correctAnswer();
     } else {
+      document.getElementById('wrongAnswerSound').play();
       this.wrongAnswer();
     }
+  }
+
+  handleButtonClick = () => {
+    this.playButtonSound();
+  }
+
+  playButtonSound = () => {
+    document.getElementById('buttonClickSound').play();
   }
 
   correctAnswer = () => {
@@ -97,7 +113,7 @@ class Play extends Component {
   }
 
   render() {
-    const { currentQuestion } = this.state;
+    const { currentQuestion, numOfQuestions, currentQuestionIndex} = this.state;
 
     
     return (
@@ -107,6 +123,11 @@ class Play extends Component {
             {' '}
             <title>Quiz Page</title>
           </Helmet>
+          <Fragment>
+              <audio id="correctAnswerSound" src={correctAnswerSound}></audio>
+              <audio  id="wrongAnswerSound" src={wrongAnswerSound}></audio>
+              <audio  id="buttonClickSound" src={buttonClickSound}></audio>
+            </Fragment>
           <div className='questions'>
             <h2>Quiz Mode</h2>
             <div className='lifeline-container'>
@@ -130,7 +151,7 @@ class Play extends Component {
               <p>
                 <span>
               {' '}
-                <span className="lifeline question-counter">1 / 15</span>
+    <span className="lifeline question-counter">{currentQuestionIndex + 1} / {numOfQuestions}</span>
                 </span>
               </p>
               <p>
@@ -153,9 +174,9 @@ class Play extends Component {
               <p onClick={this.handleOptionClick} className='option'>{currentQuestion.optionD}</p>
             </div>
             <div className='btn-container'>
-              <button>Previous</button>
-              <button>Next</button>
-              <button>Quit</button>
+              <button onClick={this.handleButtonClick} >Previous</button>
+              <button onClick={this.handleButtonClick} >Next</button>
+              <button onClick={this.handleButtonClick} >Quit</button>
             </div>   
           </div> {/* Questions */}
         </Fragment>
