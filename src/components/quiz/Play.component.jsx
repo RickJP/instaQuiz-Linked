@@ -30,7 +30,7 @@ class Play extends Component {
       wrongAnswers: 0,
       hints: 5,
       fiftyFifty: 2,
-      usedFiftyFifty: false,
+      optionsHidden: [],
       time: {},
       prevRandomNo: [],
       prevButtonDisabled: true,
@@ -180,45 +180,11 @@ class Play extends Component {
     });
 
     this.setState({
-      usedFiftyFifty: false,
+      optionsHidden: []
     });
   };
 
-  handleHints = () => {
-    if (this.state.hints > 0) {
-      const options = Array.from(document.querySelectorAll('.option'));
-      let indexOfAnswer;
-
-      options.forEach((option, index) => {
-        if (
-          option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()
-        ) {
-          indexOfAnswer = index;
-        }
-      });
-
-      while (true) {
-        const randNum = Math.round(Math.random() * 3);
-        if (
-          randNum !== indexOfAnswer &&
-          !this.state.prevRandomNo.includes(randNum)
-        ) {
-          options.forEach((option, index) => {
-            if (index === randNum) {
-              option.style.visibility = 'hidden';
-              this.setState((prevState) => ({
-                hints: prevState.hints - 1,
-                prevRandomNo: prevState.prevRandomNo.concat(randNum),
-              }));
-            }
-          });
-          break;
-        }
-        if (this.state.prevRandomNo.length >= 3) break;
-      }
-    }
-  };
-
+ 
   getIndexOfAnswer = () => {
     let indexOut;
 
@@ -239,36 +205,70 @@ class Play extends Component {
     const options = document.querySelectorAll('.option');
 
     // if there are some fifty-fifties left and one has not been used
-    if (this.state.fiftyFifty > 0 && this.state.usedFiftyFifty === false) {
+    if (this.state.fiftyFifty > 0 && this.state.optionsHidden.length === 0) {
       const indexOfAnswer = this.getIndexOfAnswer();
       let randomNumber;
       let randomNumbers = [];
-      let count = 0;
+    
 
+      let count = 0;
       do {
         randomNumber = this.generateRandomNumber(3);
         if (
           randomNumber !== indexOfAnswer &&
           !randomNumbers.includes(randomNumber)
         ) {
-          console.log(randomNumber);
           randomNumbers.push(randomNumber);
           count++;
         }
       } while (count < 2);
+      console.log(randomNumbers);
 
-      options.forEach((option, index) => {
-        if (randomNumbers.includes(index)) {
-          option.style.visibility = 'hidden';
-        }
-      });
+      this.setState({
+         optionsHidden: this.state.optionsHidden.concat(randomNumbers)
+      }, () => {
+        options.forEach((option, index) => {
+          if (this.state.optionsHidden.includes(index)) {
+            option.style.visibility = 'hidden';
+          }
+        });
+      })
+
+     
 
       this.setState((prevState) => ({
-        usedFiftyFifty: true,
         fiftyFifty: prevState.fiftyFifty - 1,
       }));
     }
   };
+
+  handleHints = () => {
+    if (this.state.hints > 0 && !this.state.optionsHidden.length < 3) {
+      const options = Array.from(document.querySelectorAll('.option'));
+      const indexOfAnswer = this.getIndexOfAnswer();
+
+      while (true) {
+        const randNum = this.generateRandomNumber(3);
+        if (
+          randNum !== indexOfAnswer &&
+          !this.state.optionsHidden.includes(randNum)
+        ) {
+          options.forEach((option, index) => {
+            if (index === randNum) {
+              option.style.visibility = 'hidden';
+              this.setState((prevState) => ({
+                hints: prevState.hints - 1,
+                optionsHidden: prevState.optionsHidden.concat(randNum),
+              }));
+            }
+          });
+          break;
+        }
+        if (this.state.prevRandomNo.length >= 3) break;
+      }
+    }
+  };
+
 
   handleButtonClick = (e) => {
     console.log(e.target.id);
@@ -394,7 +394,6 @@ class Play extends Component {
   };
 
   endQuiz = () => {
-    alert('Quiz Ended!');
     const {state} = this;
     const playerStats = {
       score: state.score,
