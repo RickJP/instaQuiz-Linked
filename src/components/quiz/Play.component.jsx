@@ -1,3 +1,4 @@
+           
 import React, {Component, Fragment} from 'react';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
@@ -9,7 +10,14 @@ import M from 'materialize-css';
 
 import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
-import buttonClickSound from '../../assets/audio/buttonClick.wav';
+import buttonClickSound2 from '../../assets/audio/buttonClick.wav';
+ import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.mp3';
+//import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.wav';
+import endOfQuizSound from '../../assets/audio/electricSweep_end-of-quiz.mp3';
+import fiftyFifySound from '../../assets/audio/lightsaberClash_fifty-fifty.mp3';
+import buttonClickSound from '../../assets/audio/fireArrow_button-click.mp3';
+import hintSound from '../../assets/audio/bellSound_hint.mp3';
+
 
 const helmetContext = {};
 
@@ -37,9 +45,13 @@ class Play extends Component {
       nextButtonDisabled: false,
     };
     this.interval = null;
-    this.wrongSound = React.createRef();
-    this.correctSound = React.createRef();
-    this.buttonSound = React.createRef();
+    this.wrongAnswerSound = React.createRef();
+    this.correctAnswerSound = React.createRef();
+    this.buttonClickSound = React.createRef();
+    this.hintSound = React.createRef();
+    this.fiftyFifySound = React.createRef();
+    this.endOfQuizSound = React.createRef();
+    this.tenSecondCountdownSound = React.createRef();
   }
 
   componentDidMount() {
@@ -51,7 +63,7 @@ class Play extends Component {
       prevQuestion,
       nextQuestion
     );
-    //this.startTimer();
+    this.startTimer();
   }
 
   componentWillUnmount() {
@@ -114,21 +126,21 @@ class Play extends Component {
 
   handleOptionClick = (e) => {
     if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-      //document.getElementById('correctAnswerSound').play();
-      this.correctSound.current.play();
+      this.correctAnswerSound.current.play();
       this.correctAnswer(true);
-      // this.correctAnswer();
     } else {
-      //document.getElementById('wrongAnswerSound').play();
-      this.wrongSound.current.play();
-      // this.wrongAnswer();
+      this.wrongAnswerSound.current.play();
       this.correctAnswer(false);
     }
   };
 
   playButtonSound = () => {
-    this.buttonSound.current.play();
+    this.buttonClickSound.current.play();
   };
+
+  playthesound = () => {
+    this.tenSecondCountdownSound.current.play();
+  }
 
   handlePrevButton = () => {
     if (this.state.prevQuestion !== undefined) {
@@ -232,13 +244,15 @@ class Play extends Component {
             option.style.visibility = 'hidden';
           }
         });
+        
       })
 
      
-
+      
       this.setState((prevState) => ({
         fiftyFifty: prevState.fiftyFifty - 1,
       }));
+      this.fiftyFifySound.current.play();
     }
   };
 
@@ -266,6 +280,7 @@ class Play extends Component {
         }
         if (this.state.prevRandomNo.length >= 3) break;
       }
+      this.hintSound.current.play();
     }
   };
 
@@ -428,20 +443,44 @@ class Play extends Component {
           </Helmet>
           <Fragment>
             <audio
-              ref={this.correctSound}
+              ref={this.correctAnswerSound}
               id="correctAnswerSound"
               src={correctAnswerSound}
             ></audio>
             <audio
-              ref={this.wrongSound}
+              ref={this.wrongAnswerSound}
               id="wrongAnswerSound"
               src={wrongAnswerSound}
             ></audio>
             <audio
-              ref={this.buttonSound}
+              ref={this.buttonClickSound}
               id="buttonClickSound"
               src={buttonClickSound}
             ></audio>
+            <audio
+              ref={this.tenSecondCountdownSound}
+              id="tenSecondCountdownSound"
+              src={tenSecondCountdownSound}
+            ></audio>
+            <audio
+              ref={this.hintSound}
+              id="hintSound"
+              src={hintSound}
+            ></audio>
+            <audio
+              ref={this.fiftyFifySound}
+              id="fiftyFifySound"
+              src={fiftyFifySound}
+            ></audio>
+            <audio
+              ref={this.endOfQuizSound}
+              id="endOfQuizSound"
+              src={endOfQuizSound}
+            ></audio>
+            
+
+
+            
           </Fragment>
           <div className="questions noselect">
             <h2>Quiz Mode</h2>
@@ -501,7 +540,7 @@ class Play extends Component {
                 {questions[currentQuestionIndex].options[3]}
               </p>
             </div>
-            <div className="btn-container">
+            {/* <div className="btn-container">
               <button
                 id="previous-button"
                 disabled={this.state.prevButtonDisabled}
@@ -519,7 +558,7 @@ class Play extends Component {
               <button id="quit-button" onClick={this.handleButtonClick}>
                 Quit
               </button>
-            </div>
+            </div> */}
           </div>{' '}
           {/* Questions */}
         </Fragment>

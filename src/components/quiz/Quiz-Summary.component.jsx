@@ -63,11 +63,7 @@ class QuizSummary extends Component {
 
     if (state !== undefined) {
       stats = (
-        <Fragment>
-          <div>
-            <span className=""> </span>
-          </div>
-          <h1>Quiz Has Ended</h1>
+        <Fragment >
           <div className="container">
             <h4>{feedback}</h4>
             <h2>{this.state.score.toFixed(0)}&#37;</h2>
