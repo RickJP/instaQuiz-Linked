@@ -1,136 +1,25 @@
 [
   {
       "question": "What temperature does water boil at?",
-      "A": "50 degrees Celsius",
+      "A": "100 degrees Celsius",
       "B": "25 degrees Celsius",
-      "C": "100 degrees Celsius",
-      "D": "150 degrees Celsius",
-      "answer": "100 degrees Celsius"
+      "C": "50 degrees Celsius",
+      "D": "150 degrees Celsius"
   },
 
   {
       "question": "Who wrote Julius Caesar, Macbeth and Hamlet?",
-      "A": "Wole Soyinka",
-      "B": "William Shakespeare",
+      "A": "William Shakespeare",
+      "B": "Wole Soyinka",
       "C": "Ngozi Chimamanda Adichie",
-      "D": "Dan Brown",
-      "answer": "William Shakespeare"
+      "D": "Dan Brown"
   },
 
   {
       "question": "What did the crocodile swallow in Peter Pan?",
-      "A": "A Book",
-      "B": "A Computer",
+      "A": "Alarm Clock",
+      "B": "A computer",
       "C": "A pair of shoes",
-      "D": "Alarm Clock",
-      "answer": "Alarm Clock"
-  },
-
-  {
-      "question": "Which is the only mammal that can’t jump?",
-      "A": "Dog",
-      "B": "Elephant",
-      "C": "Goat",
-      "D": "Lion",
-      "answer": "Elephant"
-  },
-
-  {
-      "question": "Who lived at 221B, Baker Street, London?",
-      "A": "Tony Stark",
-      "B": "Morgan Freeman",
-      "C": "Sherlock Holmes",
-      "D": "Samuel L. Jackson",
-      "answer": "Sherlock Holmes"
-  },
-
-  {
-      "question": "What colour is a panda?",
-      "A": "Green and Yellow",
-      "B": "Blue and Red",
-      "C": "Green and White",
-      "D": "Black and White",
-      "answer": "Black and White"
-  },
-
-  {
-      "question": "Where is the smallest bone in the human body?",
-      "A": "The Chest",
-      "B": "The Ear",
-      "C": "The Legs",
-      "D": "The Hands",
-      "answer": "The Ear"
-  },
-
-  {
-      "question": "What does the roman numeral C represent?",
-      "A": "100",
-      "B": "10",
-      "C": "10,000",
-      "D": "1,000,000",
-      "answer": "100"
-  },
-
-  {
-      "question": "What takes place in Hong Kong's Happy Valley?",
-      "A": "Chicken Wrestling",
-      "B": "Horse racing",
-      "C": "Street Racing",
-      "D": "Arm Wrestling",
-      "answer": "Horse racing"
-  },
-
-  {
-      "question": "Who painted the Mona Lisa?",
-      "A": "Alexander Graham Bell",
-      "B": "Sir Isaac Newton",
-      "C": "Leonardo Da Vinci",
-      "D": "Albert Einstein",
-      "answer": "Leonardo Da Vinci"
-  },
-
-  {
-      "question": "What’s the most important book in the Moslem religion?",
-      "A": "The Koran",
-      "B": "The Dictionary",
-      "C": "The Bible",
-      "D": "The Chemistry text Book",
-      "answer": "The Koran"
-  },
-
-  {
-      "question": "What’s the capital of Ethiopia?",
-      "A": "Cape Town",
-      "B": "San Francisco",
-      "C": "Abuja",
-      "D": "Syndey",
-      "answer": "Addis Ababa"
-  },
-
-  {
-      "question": "How many squares are there on a chess board?",
-      "A": "128",
-      "B": "64",
-      "C": "32",
-      "D": "256",
-      "answer": "64"
-  },
-
-  {
-      "question": "Who invented the electric light bulb?",
-      "A": "Tom Cruise",
-      "B": "Barack Obama",
-      "C": "Wole Soyinka",
-      "D": "Thomas Edison",
-      "answer": "Thomas Edison"
-  },
-
-  {
-      "question": "What are the first three words of the bible?",
-      "A": "be with everyone",
-      "B": "Again Jesus asked",
-      "C": "In the beginning",
-      "D": "At that time",
-      "answer": "In the beginning"
+      "D": "A book"
   }
 ]

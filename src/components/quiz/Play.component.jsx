@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
 
-import questions from '../../data/questions.json';
+import questionsData from '../../data/questions.json';
 import {isEmpty} from '../../utils/is-empty';
 
 import M from 'materialize-css';
@@ -17,7 +17,7 @@ class Play extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions,
+      questions: this.shuffleQuestions(),
       currentQuestion: {},
       nextQuestion: {},
       prevQuestion: {},
@@ -34,7 +34,7 @@ class Play extends Component {
       time: {},
       prevRandomNo: [],
       prevButtonDisabled: true,
-      nextButtonDisabled: false
+      nextButtonDisabled: false,
     };
     this.interval = null;
     this.wrongSound = React.createRef();
@@ -51,7 +51,7 @@ class Play extends Component {
       prevQuestion,
       nextQuestion
     );
-    this.startTimer();
+    //this.startTimer();
   }
 
   componentWillUnmount() {
@@ -90,15 +90,39 @@ class Play extends Component {
     }
   };
 
+  shuffleQuestions = () => {
+    var questions = [];
+
+    var options = [];
+    var answer = '';
+
+    for (var i in questionsData) {
+      var item = questionsData[i];
+
+      options = [item.A, item.B, item.C, item.D];
+      answer = item.A;
+      options.sort(() => Math.random() - 0.5);
+
+      questions.push({
+        question: item.question,
+        options,
+        answer: answer,
+      });
+    }
+    return questions;
+  };
+
   handleOptionClick = (e) => {
     if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
       //document.getElementById('correctAnswerSound').play();
       this.correctSound.current.play();
-      this.correctAnswer();
+      this.correctAnswer(true);
+      // this.correctAnswer();
     } else {
       //document.getElementById('wrongAnswerSound').play();
       this.wrongSound.current.play();
-      this.wrongAnswer();
+      // this.wrongAnswer();
+      this.correctAnswer(false);
     }
   };
 
@@ -195,27 +219,25 @@ class Play extends Component {
     }
   };
 
-
   getIndexOfAnswer = () => {
     let indexOut;
 
-    const options = document.querySelectorAll('.option')
+    const options = document.querySelectorAll('.option');
     options.forEach((option, index) => {
-      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase() ) {
+      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
         indexOut = index;
       }
     });
     return indexOut;
-}
+  };
 
-
-generateRandomNumber = (maxValue) => {
-  return Math.round(Math.random() * maxValue);
-};
+  generateRandomNumber = (maxValue) => {
+    return Math.round(Math.random() * maxValue);
+  };
 
   handleFiftyFify = () => {
-    const options = document.querySelectorAll('.option')
-     
+    const options = document.querySelectorAll('.option');
+
     // if there are some fifty-fifties left and one has not been used
     if (this.state.fiftyFifty > 0 && this.state.usedFiftyFifty === false) {
       const indexOfAnswer = this.getIndexOfAnswer();
@@ -225,22 +247,27 @@ generateRandomNumber = (maxValue) => {
 
       do {
         randomNumber = this.generateRandomNumber(3);
-        if (randomNumber !== indexOfAnswer && !randomNumbers.includes(randomNumber)) {
+        if (
+          randomNumber !== indexOfAnswer &&
+          !randomNumbers.includes(randomNumber)
+        ) {
           console.log(randomNumber);
           randomNumbers.push(randomNumber);
-          count ++;
+          count++;
         }
       } while (count < 2);
 
       options.forEach((option, index) => {
-      if (randomNumbers.includes(index)) {
-        option.style.visibility = 'hidden';
-      }
-     });
+        if (randomNumbers.includes(index)) {
+          option.style.visibility = 'hidden';
+        }
+      });
 
-     this.setState((prevState) => ({ usedFiftyFifty: true, fiftyFifty: prevState.fiftyFifty - 1}));
+      this.setState((prevState) => ({
+        usedFiftyFifty: true,
+        fiftyFifty: prevState.fiftyFifty - 1,
+      }));
     }
-    
   };
 
   handleButtonClick = (e) => {
@@ -262,52 +289,30 @@ generateRandomNumber = (maxValue) => {
   };
 
 
-  correctAnswer = () => {
+  correctAnswer = (correct) => {
     M.toast({
-      html: 'Correct Answer!',
-      classes: 'toast-valid',
+      html: correct ? 'Correct Answer!' : 'Wrong Answer',
+      classes: correct ? 'toast-valid' : 'toast-invalid',
       displayLength: 1000,
     });
-    this.setState(
-      (prevState) => ({
-        score: prevState.score + 1,
-        correctAnswers: prevState.correctAnswers + 1,
-        currentQuestionIndex: prevState.currentQuestionIndex + 1,
-        numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-      }),
-      () => {
-        if (this.state.nextQuestion === undefined) {
-          this.endQuiz();
-        } else {
-          this.displayQuestions(
-            this.state.questions,
-            this.state.currentQuestion,
-            this.state.prevQuestion,
-            this.state.nextQuestion
-          );
-        }
-        
-      }
-    );
-  };
 
-  wrongAnswer = () => {
-    navigator.vibrate(800);
-    M.toast({
-      html: 'Wrong Answer!',
-      classes: 'toast-invalid',
-      displayLength: 1000,
-    });
-    this.setState(
-      (prevState) => ({
-        wrongAnswers: prevState.wrongAnswers + 1,
-        currentQuestionIndex: prevState.currentQuestionIndex + 1,
-        numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-      }),
-      () => {
-        if (this.state.nextQuestion === undefined) {
-          this.endQuiz();
-        } else {
+    let score = 0;  let correctAnswers = 0;  let wrongAnswers = 1;
+    if (correct) {
+      score = 1;
+      correctAnswers = 1;
+      wrongAnswers = 0;
+    }
+
+    if (this.state.currentQuestionIndex !== this.state.questions.length - 1) {
+      this.setState(
+        (prevState) => ({
+          score: prevState.score + score,
+          wrongAnswers: prevState.wrongAnswers + wrongAnswers,
+          correctAnswers: prevState.correctAnswers + correctAnswers,
+          currentQuestionIndex: prevState.currentQuestionIndex + 1,
+          numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+        }),
+        () => {
           this.displayQuestions(
             this.state.questions,
             this.state.currentQuestion,
@@ -315,14 +320,26 @@ generateRandomNumber = (maxValue) => {
             this.state.nextQuestion
           );
         }
-        
-      }
-    );
-  };
+      );
+    } else {
+      this.setState(
+        (prevState) => ({
+          score: prevState.score + score,
+          correctAnswers: prevState.correctAnswers + correctAnswers,
+          wrongAnswers: prevState.wrongAnswers + wrongAnswers,
+          numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+        }),
+        () => {
+          this.endQuiz();
+        }
+      );
+    }
+  }
+  
 
   selectedTimeToMS = (mins = 1, secs = 0) => {
-    return ((mins * 60) * 1000) + (secs * 1000);
-  }
+    return mins * 60 * 1000 + secs * 1000;
+  };
 
   startTimer = () => {
     const countDownTime = Date.now() + this.selectedTimeToMS();
@@ -336,59 +353,71 @@ generateRandomNumber = (maxValue) => {
       // if timer has finished
       if (distance < 0) {
         clearInterval(this.interval);
-        this.setState({
-          time: {
-            seconds: 0,
-            minutes: 0
+        this.setState(
+          {
+            time: {
+              seconds: 0,
+              minutes: 0,
+            },
+          },
+          () => {
+            this.endQuiz();
           }
-        }, () => {
-          this.endQuiz();
-        })
+        );
       } else {
         this.setState({
           time: {
             seconds,
-            minutes
-          }
-        })
+            minutes,
+          },
+        });
       }
     }, 1000);
-  }
+  };
 
   handleDisableButton = () => {
-    if (this.state.prevQuestion === undefined || this.state.currentQuestionIndex === 0) {
-      this.setState({ prevButtonDisabled: true })
+    if (
+      this.state.prevQuestion === undefined ||
+      this.state.currentQuestionIndex === 0
+    ) {
+      this.setState({prevButtonDisabled: true});
     } else {
-      this.setState({ prevButtonDisabled: false })
+      this.setState({prevButtonDisabled: false});
     }
-    if (this.state.nextQuestion === undefined || this.state.currentQuestionIndex + 1 === this.state.numOfQuestions) {
-      this.setState({ nextButtonDisabled: true })
-      this.setState({ prevButtonDisabled: true })
+    if (
+      this.state.nextQuestion === undefined ||
+      this.state.currentQuestionIndex + 1 === this.state.numOfQuestions
+    ) {
+      this.setState({nextButtonDisabled: true});
+      this.setState({prevButtonDisabled: true});
     }
-  }
+  };
 
   endQuiz = () => {
     alert('Quiz Ended!');
-    const { state } = this;
+    const {state} = this;
     const playerStats = {
       score: state.score,
       numOfQuestions: state.numOfQuestions,
-      numberOfAnsweredQuestions: (state.correctAnswers + state.wrongAnswers),
+      numberOfAnsweredQuestions: state.correctAnswers + state.wrongAnswers,
       correctAnswers: state.correctAnswers,
       wrongAnswers: state.wrongAnswers,
       fiftyFiftyUsed: 2 - state.fiftyFifty,
-      hintsUsed: 5 - state.hints
+      hintsUsed: 5 - state.hints,
     };
     console.log(playerStats);
     setTimeout(() => {
       this.props.history.push('/play/quizsummary', playerStats);
-    }, 2000)
-  }
+    }, 2000);
+  };
 
   render() {
     const {
-      currentQuestion, numOfQuestions, currentQuestionIndex,
-      time
+      questions,
+      currentQuestion,
+      numOfQuestions,
+      currentQuestionIndex,
+      time,
     } = this.state;
 
     return (
@@ -399,9 +428,21 @@ generateRandomNumber = (maxValue) => {
             <title>Quiz Page</title>
           </Helmet>
           <Fragment>
-            <audio ref={this.correctSound} id="correctAnswerSound" src={correctAnswerSound}></audio>
-            <audio ref={this.wrongSound} id="wrongAnswerSound" src={wrongAnswerSound}></audio>
-            <audio ref={this.buttonSound} id="buttonClickSound" src={buttonClickSound}></audio>
+            <audio
+              ref={this.correctSound}
+              id="correctAnswerSound"
+              src={correctAnswerSound}
+            ></audio>
+            <audio
+              ref={this.wrongSound}
+              id="wrongAnswerSound"
+              src={wrongAnswerSound}
+            ></audio>
+            <audio
+              ref={this.buttonSound}
+              id="buttonClickSound"
+              src={buttonClickSound}
+            ></audio>
           </Fragment>
           <div className="questions noselect">
             <h2>Quiz Mode</h2>
@@ -436,7 +477,9 @@ generateRandomNumber = (maxValue) => {
               </p>
               <p>
                 <span>
-    <span id="timer-no">{time.minutes}:{time.seconds}</span>
+                  <span id="timer-no">
+                    {time.minutes}:{time.seconds}
+                  </span>
                 </span>
                 <AvTimer onClick={this.handleHints} id="timer-icon" />
               </p>
@@ -445,25 +488,33 @@ generateRandomNumber = (maxValue) => {
             <h4 className="question">{currentQuestion.question}</h4>
             <div className="options-container">
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.A}
+                {questions[currentQuestionIndex].options[0]}
               </p>
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.B}
+                {questions[currentQuestionIndex].options[1]}
               </p>
             </div>
             <div className="options-container">
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.C}
+                {questions[currentQuestionIndex].options[2]}
               </p>
               <p onClick={this.handleOptionClick} className="option">
-                {currentQuestion.D}
+                {questions[currentQuestionIndex].options[3]}
               </p>
             </div>
             <div className="btn-container">
-              <button id="previous-button" disabled={this.state.prevButtonDisabled} onClick={this.handleButtonClick}>
+              <button
+                id="previous-button"
+                disabled={this.state.prevButtonDisabled}
+                onClick={this.handleButtonClick}
+              >
                 Previous
               </button>
-              <button id="next-button"  disabled={this.state.nextButtonDisabled} onClick={this.handleButtonClick}>
+              <button
+                id="next-button"
+                disabled={this.state.nextButtonDisabled}
+                onClick={this.handleButtonClick}
+              >
                 Next
               </button>
               <button id="quit-button" onClick={this.handleButtonClick}>
@@ -477,7 +528,5 @@ generateRandomNumber = (maxValue) => {
     );
   }
 }
-
-
 
 export default Play;
