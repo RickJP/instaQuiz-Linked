@@ -10,7 +10,7 @@ import M from 'materialize-css';
 
 import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
-import buttonClickSound2 from '../../assets/audio/buttonClick.wav';
+// import buttonClickSound2 from '../../assets/audio/buttonClick.wav';
  import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.mp3';
 //import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.wav';
 import endOfQuizSound from '../../assets/audio/electricSweep_end-of-quiz.mp3';
@@ -43,6 +43,11 @@ class Play extends Component {
       prevRandomNo: [],
       prevButtonDisabled: true,
       nextButtonDisabled: false,
+
+      time: {
+        mins: 1,
+        secs: 15
+      }
     };
     this.interval = null;
     this.wrongAnswerSound = React.createRef();
@@ -352,8 +357,8 @@ class Play extends Component {
   }
   
 
-  selectedTimeToMS = (mins = 1, secs = 0) => {
-    return mins * 60 * 1000 + secs * 1000;
+  selectedTimeToMS = () => {
+    return this.state.time.mins * 60 * 1000 + this.state.time.secs * 1000;
   };
 
   startTimer = () => {
@@ -387,7 +392,13 @@ class Play extends Component {
           },
         });
       }
+      if (seconds === 10) this.tenSecondCountdownSound.current.play();
+      // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
+
+      console.log(seconds);
     }, 1000);
+
+
   };
 
   handleDisableButton = () => {
@@ -516,7 +527,7 @@ class Play extends Component {
               <p>
                 <span>
                   <span id="timer-no">
-                    {time.minutes}:{time.seconds}
+    {time.minutes}:{time.seconds < 10 ? '0' : ''}{time.seconds}
                   </span>
                 </span>
                 <AvTimer onClick={this.handleHints} id="timer-icon" />

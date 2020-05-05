@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 
 import {HelmetProvider} from 'react-helmet-async';
-import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
+// import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
 import {Link} from 'react-router-dom';
 
 class QuizSummary extends Component {
