@@ -251,7 +251,7 @@ class Play extends Component {
   handleHints = () => {
     if (this.state.hints > 0 && this.state.optionsHidden.length <= 2) {
       const options = Array.from(document.querySelectorAll('.option'));
-      // const indexOfAnswer = this.getIndexOfAnswer(); 
+      
 
       while (true) {
         const randNum = this.generateRandomNumber(3);
