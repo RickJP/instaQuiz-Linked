@@ -15,7 +15,7 @@ const Home = () => (
         id="buttonClickSound"
         src={buttonClickSound}
       ></audio>
-      <section>
+      <section className="menu">
         <div>
           {/* <FontAwesomeIcon icon={['fab', 'apple']} /> */}
           <span>
@@ -25,9 +25,10 @@ const Home = () => (
           <div className="play-button-container">
             <ul>
               <li>
-                <Link onClick={playButtonClickSound} className="play-button" to="/play/instructions">
+                <Link onClick={playButtonClickSound} className="play-button" to="/play/quiz">
                   Play
                 </Link>
+               
               </li>
             </ul>
           </div>

@@ -17,7 +17,6 @@ class QuizSummary extends Component {
       fiftyFiftyUsed: 0,
       hintsUsed: 0,
     };
-    buttonClickSound = React.createRef();
   }
 
   componentDidMount() {

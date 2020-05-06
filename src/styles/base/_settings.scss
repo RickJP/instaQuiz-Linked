@@ -15,24 +15,6 @@ $btn-shadow:0 .125em rgba(255,255,255,.4), inset 0 .063em   rgba(255,255,255,.4)
 //   border-color: #743EA5;
 // }
 
-@mixin set-nav-btn($color) {
-  background-color: darken($color, 10%);
-  box-shadow: $btn-shadow;
-  transition: 0.2s linear all;
-  &:hover {
-    background-color: darken($color, 20%);
-  }
-}
-
-@mixin style-icon($color) {
-  font-size: 3rem;
-  color: darken($color, 10%);
-  transition: 0.2s linear all;
-  &:hover {
-    color: lighten($color, 30%);
-    transform: scale(1.5);
-  }
-}
 
 
 $xs: 0.5rem;
@@ -45,7 +27,7 @@ $xlg: 5rem;
 $xxlg: 7rem;
 
 // Buttons
-$button-radius: 30px;
+$button-radius: 20px;
 
 // Breakpoints
 $lg-breakpoint: 1024px;

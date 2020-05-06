@@ -10,16 +10,13 @@
   padding: 5rem;
   
 
-  section {
+  .menu {
     background-color: $dark-semi-transparent;
     border-radius: 5px;
     padding: $md $md;
     height: 100%;
-    min-width: 200px;
-    max-width: 350px;
-
     // min-width: 200px;
-    // max-width: 300px;
+    // max-width: 350px;
 
     .appLogo {
 
@@ -45,21 +42,6 @@
       
       width: 100%;
     }
-
-    // .btn {
-    //   border: 1px solid #2d6898;
-    //   background-image: linear-gradient(bottom, rgb(73, 132, 180) 0%, rgb(97, 155, 203) 100%);
-    //   background-image: -o-linear-gradient(bottom, rgb(73, 132, 180) 0%, rgb(97, 155, 203) 100%);
-    //   background-image: -moz-linear-gradient(bottom, rgb(73, 132, 180) 0%, rgb(97, 155, 203) 100%);
-    //   background-image: -webkit-linear-gradient(bottom, rgb(73, 132, 180) 0%, rgb(97, 155, 203) 100%);
-    //   background-image: -ms-linear-gradient(bottom, rgb(73, 132, 180) 0%, rgb(97, 155, 203) 100%);
-
-    //   background-image: -webkit-gradient(linear,
-    //       left bottom,
-    //       left top,
-    //       color-stop(0, rgb(73, 132, 180)),
-    //       color-stop(1, rgb(97, 155, 203)));
-    // }
 
     a {
       font-family: 'Fredoka One';
@@ -132,5 +114,33 @@
 
   .play-button-container {
     padding: $lg 0;
+  }
+}
+
+
+@media (max-width: $xs-breakpoint) {
+  #home {
+    padding: 0;
+    .menu {
+      padding: $xlg;
+      width: 100%;
+      height: 100%;
+  
+     
+      background-color: $dark-semi-transparent;
+      border-radius: 5px;
+      height: 100%;
+      width: 100%;
+
+      .play-button-container {
+        padding: $xxlg $sm;
+        .play-button {
+          height: 6rem;
+          padding: $sm;
+          height: 6rem;
+          font-size: 2rem;
+        }
+      }
+   }
   }
 }

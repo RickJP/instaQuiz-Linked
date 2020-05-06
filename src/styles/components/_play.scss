@@ -1,4 +1,27 @@
-.questions {
+
+@mixin set-nav-btn($color) {
+  background-color: darken($color, 10%);
+  box-shadow: $btn-shadow;
+  transition: 0.2s linear all;
+  &:hover {
+    background-color: darken($color, 20%);
+  }
+}
+
+@mixin style-icon($color, $hover) {
+  font-size: 3rem;
+  color: darken($color, 10%);
+  transition: 0.2s linear all;
+  @if $hover {
+    &:hover {
+      color: lighten($color, 30%);
+      transform: scale(1.5);
+    }
+  }
+  
+}
+
+.quiz {
   background-color: $off-white;
   border-left: 5px solid $nice-blue;
   width: 80%;
@@ -6,37 +29,38 @@
   padding: $sm $md;
   font-family: 'Fredoka One';
 
-  h2 {
+  .quiz-title {
     text-align: center;
     font-weight: lighter;
+    font-size: 3rem;
   }
 
-  .icons{
+  .icons {
     cursor: pointer;
   }
   #hints-icon {
-    @include style-icon(orange);
+    @include style-icon(orange, true);
   }
   #fifty-fifty-icon {
-    @include style-icon(green);
+    @include style-icon(green, true);
   }
   #timer-icon {
     margin-left: 1.2rem;
-    @include style-icon(blue);
-   
+    @include style-icon(blue, false);
   }
 
   .lifeline-no {
     font-size: 2rem;
     position: relative;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
     top: -6px;
   }
 
-  .lifeline-container, .info-container {
+  .lifeline-container,
+  .info-container {
     display: flex;
     justify-content: space-between;
-  
+
     #question-counter {
       position: relative;
       top: 10px;
@@ -45,10 +69,9 @@
     #timer-no {
       position: relative;
       font-size: 2rem;
-      top: -.5rem;
+      top: -0.5rem;
     }
   }
- 
 
   .question {
     font-size: 1.5rem;
@@ -62,22 +85,23 @@
     display: inline-block;
     width: 45%;
     margin: 10px;
-  }
-  .option {
-    background-color: $nice-blue;
-    border-radius: $button-radius;
-    color: $off-white;
-    cursor: pointer;
-    margin: $md auto;
-    padding: $md;
-    transition: .3s linear all;
-    text-align: center;
-    width: 90%;
-    height: 6rem;
-    
 
-    &:hover {
-      background-color: darken($nice-blue, 20%);
+    .option {
+      background-color: $nice-blue;
+      border-radius: $button-radius;
+      color: $off-white;
+      cursor: pointer;
+      margin: $md auto;
+      padding: $md;
+      transition: 0.3s linear all;
+      text-align: center;
+      font-size: 1rem;
+      width: 90%;
+      height: 7rem;
+
+      &:hover {
+        background-color: darken($nice-blue, 20%);
+      }
     }
   }
 
@@ -120,7 +144,78 @@
     }
     // Quit Button
     button:nth-child(3) {
-      @include set-nav-btn($red)
+      @include set-nav-btn($red);
+    }
+  }
+}
+
+@media (max-width: $xs-breakpoint) {
+  .quiz {
+    border: none;
+    margin: $xs auto 0 auto;
+    padding: 0;
+
+    .top-panel {
+      background-color: rgba(0, 0, 255, 0.1);
+      border-radius: 1rem;
+      padding: 0.7rem;
+
+      #fifty-fifty-icon, #hints-icon, #timer-icon  {
+        font-size: 3rem;
+      }
+
+      .lifeline-no {
+        font-size: 1.5rem;
+      }
+
+      .info-container {
+        display: flex;
+        justify-content: space-between;
+
+        #question-counter,
+        #timer-no {
+          position: relative;
+          font-size: 1.2rem;
+        }
+        #question-counter {
+          margin-left: 2rem;
+          top: 0.5rem;
+        }
+        #timer-no {
+          top: -1.2rem;
+        }
+      }
+    }
+
+    .question {
+      margin-top: $normal;
+      font-size: 1.2rem;
+    }
+    .options-container {
+      display: inline-block;
+      width: 100%;
+      .option {
+        margin: $sm auto;
+        padding: $md;
+        transition: 0.3s linear all;
+        text-align: center;
+        display: block;
+        width: 100%;
+        height: 5rem;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+
+        &:hover {
+          background-color: darken($nice-blue, 20%);
+        }
+      }
+      margin: 0;
+    }
+    .options-container2 {
+      .option:nth-child(1) {
+        margin: 0;
+      }
     }
   }
 }

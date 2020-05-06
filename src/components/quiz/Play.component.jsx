@@ -1,4 +1,3 @@
-           
 import React, {Component, Fragment} from 'react';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
@@ -11,13 +10,12 @@ import M from 'materialize-css';
 import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
 // import buttonClickSound2 from '../../assets/audio/buttonClick.wav';
- import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.mp3';
+import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.mp3';
 //import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.wav';
 import endOfQuizSound from '../../assets/audio/electricSweep_end-of-quiz.mp3';
 import fiftyFifySound from '../../assets/audio/lightsaberClash_fifty-fifty.mp3';
 import buttonClickSound from '../../assets/audio/fireArrow_button-click.mp3';
 import hintSound from '../../assets/audio/bellSound_hint.mp3';
-
 
 const helmetContext = {};
 
@@ -44,9 +42,9 @@ class Play extends Component {
       nextButtonDisabled: false,
 
       time: {
-        mins: 1,
-        secs: 15
-      }
+        mins: 5,
+        secs: 15,
+      },
     };
     this.interval = null;
     this.wrongAnswerSound = React.createRef();
@@ -144,7 +142,7 @@ class Play extends Component {
 
   playthesound = () => {
     this.tenSecondCountdownSound.current.play();
-  }
+  };
 
   handlePrevButton = () => {
     if (this.state.prevQuestion !== undefined) {
@@ -196,11 +194,10 @@ class Play extends Component {
     });
 
     this.setState({
-      optionsHidden: []
+      optionsHidden: [],
     });
   };
 
- 
   getIndexOfAnswer = () => {
     let indexOut;
 
@@ -225,7 +222,6 @@ class Play extends Component {
       const indexOfAnswer = this.getIndexOfAnswer();
       let randomNumber;
       let randomNumbers = [];
-    
 
       let count = 0;
       do {
@@ -240,19 +236,19 @@ class Play extends Component {
       } while (count < 2);
       console.log(randomNumbers);
 
-      this.setState({
-         optionsHidden: this.state.optionsHidden.concat(randomNumbers)
-      }, () => {
-        options.forEach((option, index) => {
-          if (this.state.optionsHidden.includes(index)) {
-            option.style.visibility = 'hidden';
-          }
-        });
-        
-      })
+      this.setState(
+        {
+          optionsHidden: this.state.optionsHidden.concat(randomNumbers),
+        },
+        () => {
+          options.forEach((option, index) => {
+            if (this.state.optionsHidden.includes(index)) {
+              option.style.visibility = 'hidden';
+            }
+          });
+        }
+      );
 
-     
-      
       this.setState((prevState) => ({
         fiftyFifty: prevState.fiftyFifty - 1,
       }));
@@ -288,7 +284,6 @@ class Play extends Component {
     }
   };
 
-
   handleButtonClick = (e) => {
     console.log(e.target.id);
     switch (e.target.id) {
@@ -307,7 +302,6 @@ class Play extends Component {
     this.playButtonSound();
   };
 
-
   correctAnswer = (correct) => {
     M.toast({
       html: correct ? 'Correct Answer!' : 'Wrong Answer',
@@ -315,7 +309,9 @@ class Play extends Component {
       displayLength: 1000,
     });
 
-    let score = 0;  let correctAnswers = 0;  let wrongAnswers = 1;
+    let score = 0;
+    let correctAnswers = 0;
+    let wrongAnswers = 1;
     if (correct) {
       score = 1;
       correctAnswers = 1;
@@ -353,8 +349,7 @@ class Play extends Component {
         }
       );
     }
-  }
-  
+  };
 
   selectedTimeToMS = () => {
     return this.state.time.mins * 60 * 1000 + this.state.time.secs * 1000;
@@ -392,13 +387,12 @@ class Play extends Component {
         });
       }
       console.log(seconds);
-      if (minutes === 0 &&  seconds === 10) this.tenSecondCountdownSound.current.play();
+      if (minutes === 0 && seconds === 10)
+        this.tenSecondCountdownSound.current.play();
       // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
 
       console.log(seconds);
     }, 1000);
-
-
   };
 
   handleDisableButton = () => {
@@ -474,11 +468,7 @@ class Play extends Component {
               id="tenSecondCountdownSound"
               src={tenSecondCountdownSound}
             ></audio>
-            <audio
-              ref={this.hintSound}
-              id="hintSound"
-              src={hintSound}
-            ></audio>
+            <audio ref={this.hintSound} id="hintSound" src={hintSound}></audio>
             <audio
               ref={this.fiftyFifySound}
               id="fiftyFifySound"
@@ -489,50 +479,47 @@ class Play extends Component {
               id="endOfQuizSound"
               src={endOfQuizSound}
             ></audio>
-            
-
-
-            
           </Fragment>
-          <div className="questions noselect">
-            <h2>Quiz Mode</h2>
-            <div className="lifeline-container">
-              <p>
-                {' '}
-                <StarHalf
-                  onClick={this.handleFiftyFify}
-                  className="icons"
-                  id="fifty-fifty-icon"
-                />
-                <span className="lifeline-no">{this.state.fiftyFifty}</span>
-              </p>
-              <p>
-                {' '}
-                <WbIncandescent
-                  onClick={this.handleHints}
-                  className="icons"
-                  id="hints-icon"
-                />
-                <span className="lifeline-no">{this.state.hints}</span>
-              </p>
-            </div>
+          <div className="quiz noselect">
+            <h2 className="quiz-title">InstaQuiz</h2>
 
-            <div className="info-container">
-              <p>
-                <span>
+            <div className="top-panel">
+              <div className="lifeline-container">
+                <p>
+                  {' '}
+                  <StarHalf
+                    onClick={this.handleFiftyFify}
+                    className="icons"
+                    id="fifty-fifty-icon"
+                  />
+                  <span className="lifeline-no">{this.state.fiftyFifty}</span>
+                </p>
+                <p>
+                  {' '}
+                  <WbIncandescent
+                    onClick={this.handleHints}
+                    className="icons"
+                    id="hints-icon"
+                  />
+                  <span className="lifeline-no">{this.state.hints}</span>
+                </p>
+              </div>
+
+              <div className="info-container">
+                <p>
                   <span id="question-counter">
                     {currentQuestionIndex + 1} / {numOfQuestions}
                   </span>
-                </span>
-              </p>
-              <p>
-                <span>
+                </p>
+                <p>
                   <span id="timer-no">
-    {time.minutes}:{time.seconds < 10 ? '0' : ''}{time.seconds}
+                    {time.minutes}:{time.seconds < 10 ? '0' : ''}
+                    {time.seconds}
                   </span>
-                </span>
-                <AvTimer onClick={this.handleHints} id="timer-icon" />
-              </p>
+
+                  <AvTimer id="timer-icon" />
+                </p>
+              </div>
             </div>
 
             <h4 className="question">{currentQuestion.question}</h4>
@@ -544,7 +531,7 @@ class Play extends Component {
                 {questions[currentQuestionIndex].options[1]}
               </p>
             </div>
-            <div className="options-container">
+            <div className="options-container options-container2">
               <p onClick={this.handleOptionClick} className="option">
                 {questions[currentQuestionIndex].options[2]}
               </p>
@@ -552,6 +539,8 @@ class Play extends Component {
                 {questions[currentQuestionIndex].options[3]}
               </p>
             </div>
+          
+         
             {/* <div className="btn-container">
               <button
                 id="previous-button"
