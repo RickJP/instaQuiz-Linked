@@ -1,4 +1,5 @@
 
+
 @mixin set-nav-btn($color) {
   background-color: darken($color, 10%);
   box-shadow: $btn-shadow;
@@ -25,8 +26,8 @@
   background-color: $off-white;
   border-left: 5px solid $nice-blue;
   width: 80%;
-  margin: $lg auto 0 auto;
-  padding: $sm $md;
+  margin: $lg auto;
+  padding: $xs;
   font-family: $main-font;
 
   .quiz-title {
@@ -84,7 +85,7 @@
   .options-container {
     display: inline-block;
     width: 45%;
-    margin: 10px;
+   
 
     .option {
       background-color: $nice-blue;
@@ -98,6 +99,10 @@
       font-size: 1rem;
       width: 90%;
       height: 7rem;
+
+      -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 
       &:hover {
         background-color: darken($nice-blue, 20%);
@@ -148,6 +153,27 @@
     }
   }
 }
+@media (max-width: $lg-breakpoint) {
+
+  .quiz {
+    background-color: $off-white;
+    border-left: 5px solid $nice-blue;
+    width: 90%;
+    margin: $md $sm;
+    // padding: $xs;
+    font-family: $main-font;
+
+
+    .option {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+  }
+  
+
+  
+}
 
 @media (max-width: $xs-breakpoint) {
   .quiz {
@@ -195,7 +221,7 @@
       display: inline-block;
       width: 100%;
       .option {
-        margin: $sm auto;
+        margin: $normal auto;
         padding: $md;
         transition: 0.3s linear all;
         text-align: center;

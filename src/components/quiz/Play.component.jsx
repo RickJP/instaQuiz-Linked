@@ -39,9 +39,8 @@ class Play extends Component {
       // prevRandomNo: [],
       // prevButtonDisabled: true,
       // nextButtonDisabled: false,
-
       time: {
-        mins: 5,
+        mins: 1,
         secs: 15,
       },
     };
@@ -212,7 +211,7 @@ class Play extends Component {
 
     // if there are some fifty-fifties left and one has not been used
     if (this.state.fiftyFifty > 0 && this.state.optionsHidden.length === 0) {
-      const indexOfAnswer = this.getIndexOfAnswer();  //TODO
+      //const indexOfAnswer = this.getIndexOfAnswer();  
       let randomNumber;
       let randomNumbers = [];
 
@@ -220,7 +219,7 @@ class Play extends Component {
       do {
         randomNumber = this.generateRandomNumber(3);
         if (
-          randomNumber !== indexOfAnswer &&
+          randomNumber !== this.state.indexOfAnswer &&
           !randomNumbers.includes(randomNumber)
         ) {
           randomNumbers.push(randomNumber);
@@ -250,14 +249,14 @@ class Play extends Component {
   };
 
   handleHints = () => {
-    if (this.state.hints > 0 && !this.state.optionsHidden.length < 3) {
+    if (this.state.hints > 0 && this.state.optionsHidden.length <= 2) {
       const options = Array.from(document.querySelectorAll('.option'));
-      const indexOfAnswer = this.getIndexOfAnswer(); //TODO
+      // const indexOfAnswer = this.getIndexOfAnswer(); 
 
       while (true) {
         const randNum = this.generateRandomNumber(3);
         if (
-          randNum !== indexOfAnswer &&
+          randNum !== this.state.indexOfAnswer &&
           !this.state.optionsHidden.includes(randNum)
         ) {
           options.forEach((option, index) => {
