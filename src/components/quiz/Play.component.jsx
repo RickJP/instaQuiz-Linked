@@ -25,8 +25,8 @@ class Play extends Component {
     this.state = {
       questions: this.shuffleAnswers(questionsData),
       currentQuestion: {},
-      nextQuestion: {},
-      prevQuestion: {},
+      // nextQuestion: {},
+      // prevQuestion: {},
       answer: '',
       numOfQuestions: 0,
       numberOfAnsweredQuestions: 0,
@@ -37,9 +37,9 @@ class Play extends Component {
       hints: 5,
       fiftyFifty: 2,
       optionsHidden: [],
-      prevRandomNo: [],
-      prevButtonDisabled: true,
-      nextButtonDisabled: false,
+      // prevRandomNo: [],
+      // prevButtonDisabled: true,
+      // nextButtonDisabled: false,
 
       time: {
         mins: 5,
@@ -105,22 +105,22 @@ class Play extends Component {
   };
 
   shuffleAnswers = (questionsToUse) => {
-    var questions = [];
+    let questions = [];
+    let options = [];
+    let answer = '';
 
-    var options = [];
-    var answer = '';
-
-    for (var i in questionsToUse) {
-      var item = questionsToUse[i];
+    for (let i in questionsToUse) {
+      let item = questionsToUse[i];
 
       options = [item.A, item.B, item.C, item.D];
+      // Answer is always the first element before it is shuffled
       answer = item.A;
       options.sort(() => Math.random() - 0.5);
 
       questions.push({
         question: item.question,
         options,
-        answer: answer,
+        answer
       });
     }
     return questions;
@@ -198,17 +198,17 @@ class Play extends Component {
     });
   };
 
-  getIndexOfAnswer = () => {
-    let indexOut;
+  // getIndexOfAnswer = () => {
+  //   let indexOut;
 
-    const options = document.querySelectorAll('.option');
-    options.forEach((option, index) => {
-      if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-        indexOut = index;
-      }
-    });
-    return indexOut;
-  };
+  //   const options = document.querySelectorAll('.option');
+  //   options.forEach((option, index) => {
+  //     if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
+  //       indexOut = index;
+  //     }
+  //   });
+  //   return indexOut;
+  // };
 
   generateRandomNumber = (maxValue) => {
     return Math.round(Math.random() * maxValue);
@@ -219,7 +219,7 @@ class Play extends Component {
 
     // if there are some fifty-fifties left and one has not been used
     if (this.state.fiftyFifty > 0 && this.state.optionsHidden.length === 0) {
-      const indexOfAnswer = this.getIndexOfAnswer();
+      const indexOfAnswer = this.getIndexOfAnswer();  //TODO
       let randomNumber;
       let randomNumbers = [];
 
@@ -259,7 +259,7 @@ class Play extends Component {
   handleHints = () => {
     if (this.state.hints > 0 && !this.state.optionsHidden.length < 3) {
       const options = Array.from(document.querySelectorAll('.option'));
-      const indexOfAnswer = this.getIndexOfAnswer();
+      const indexOfAnswer = this.getIndexOfAnswer(); //TODO
 
       while (true) {
         const randNum = this.generateRandomNumber(3);
