@@ -1,6 +1,7 @@
 import React, { Fragment} from 'react';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
+import buttonClickSound from '../../assets/audio/fireArrow_button-click.mp3';
 
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -10,18 +11,16 @@ const QuizInstructions = () => (
   <HelmetProvider context={helmetContext}>
     <Fragment>
       <Helmet><title>Quiz Instructions - Quiz App</title></Helmet>
-      <div className="instructions">
+      <div className="instructions noselect">
         <h1>How to Play the Quiz</h1>
-        <p>Ensure you read this guide from start to finish.</p>
+        {/* <p>Ensure you read this guide from start to finish.</p> */}
         <ul className="browser-default" id="main-list">
-          <li>The quiz lasts 15 minutes, and ends as soon as your timer finishes.</li>
-          <li>Each turn consists of 15 questions.</li>
-          <li>And has 4 options.
-            {/* <img src={options} alt="Select options example"/> */}
-          </li>
+          <li>The quiz lasts 1 minute, and ends as soon as your timer finishes.</li>
+          <li>There are 15 questions and 4 choices.</li>
           <li>Click your selected answer.
             {/* <img src={answer} alt="Select an answer example"/> */}
           </li>
+          <br />
           <li>
             Each answer has two lifelines:
             <ul id="sublist">

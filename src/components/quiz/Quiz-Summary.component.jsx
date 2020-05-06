@@ -3,6 +3,7 @@ import React, {Component, Fragment} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 // import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
 import {Link} from 'react-router-dom';
+import buttonClickSound from '../../assets/audio/fireArrow_button-click.mp3';
 
 class QuizSummary extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class QuizSummary extends Component {
       fiftyFiftyUsed: 0,
       hintsUsed: 0,
     };
+    buttonClickSound = React.createRef();
   }
 
   componentDidMount() {

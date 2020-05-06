@@ -25,7 +25,7 @@ class Play extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: this.shuffleQuestions(),
+      questions: this.shuffleAnswers(questionsData),
       currentQuestion: {},
       nextQuestion: {},
       prevQuestion: {},
@@ -39,7 +39,6 @@ class Play extends Component {
       hints: 5,
       fiftyFifty: 2,
       optionsHidden: [],
-      time: {},
       prevRandomNo: [],
       prevButtonDisabled: true,
       nextButtonDisabled: false,
@@ -107,14 +106,14 @@ class Play extends Component {
     }
   };
 
-  shuffleQuestions = () => {
+  shuffleAnswers = (questionsToUse) => {
     var questions = [];
 
     var options = [];
     var answer = '';
 
-    for (var i in questionsData) {
-      var item = questionsData[i];
+    for (var i in questionsToUse) {
+      var item = questionsToUse[i];
 
       options = [item.A, item.B, item.C, item.D];
       answer = item.A;
@@ -392,7 +391,8 @@ class Play extends Component {
           },
         });
       }
-      if (seconds === 10) this.tenSecondCountdownSound.current.play();
+      console.log(seconds);
+      if (minutes === 0 &&  seconds === 10) this.tenSecondCountdownSound.current.play();
       // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
 
       console.log(seconds);
@@ -431,9 +431,10 @@ class Play extends Component {
       hintsUsed: 5 - state.hints,
     };
     console.log(playerStats);
+    this.endOfQuizSound.current.play();
     setTimeout(() => {
       this.props.history.push('/play/quizsummary', playerStats);
-    }, 2000);
+    }, 3000);
   };
 
   render() {
