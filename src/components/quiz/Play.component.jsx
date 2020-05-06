@@ -9,9 +9,7 @@ import M from 'materialize-css';
 
 import correctAnswerSound from '../../assets/audio/correctAnswer.wav';
 import wrongAnswerSound from '../../assets/audio/wrongAnswer.wav';
-// import buttonClickSound2 from '../../assets/audio/buttonClick.wav';
 import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.mp3';
-//import tenSecondCountdownSound from '../../assets/audio/buzzer_ten-second-countdown.wav';
 import endOfQuizSound from '../../assets/audio/electricSweep_end-of-quiz.mp3';
 import fiftyFifySound from '../../assets/audio/lightsaberClash_fifty-fifty.mp3';
 import buttonClickSound from '../../assets/audio/fireArrow_button-click.mp3';
@@ -37,6 +35,7 @@ class Play extends Component {
       hints: 5,
       fiftyFifty: 2,
       optionsHidden: [],
+      indexOfAnswer: 0,
       // prevRandomNo: [],
       // prevButtonDisabled: true,
       // nextButtonDisabled: false,
@@ -76,7 +75,8 @@ class Play extends Component {
     questions = this.state.questions,
     currentQuestion,
     nextQuestion,
-    prevQuestion
+    prevQuestion,
+    indexOfAnswer
   ) => {
     let {currentQuestionIndex} = this.state;
 
@@ -85,16 +85,17 @@ class Play extends Component {
       currentQuestion = questions[currentQuestionIndex];
       prevQuestion = questions[currentQuestionIndex - 1];
       nextQuestion = questions[currentQuestionIndex + 1];
-      const answer = currentQuestion.answer;
+
+      indexOfAnswer = questions[currentQuestionIndex].indexOfAnswer
 
       this.setState(
         {
           currentQuestion,
           prevQuestion,
           nextQuestion,
-          answer,
           numOfQuestions: questions.length,
           prevRandomNo: [],
+          indexOfAnswer
         },
         () => {
           this.showOptions();
@@ -107,27 +108,31 @@ class Play extends Component {
   shuffleAnswers = (questionsToUse) => {
     let questions = [];
     let options = [];
-    let answer = '';
 
     for (let i in questionsToUse) {
       let item = questionsToUse[i];
 
       options = [item.A, item.B, item.C, item.D];
       // Answer is always the first element before it is shuffled
-      answer = item.A;
       options.sort(() => Math.random() - 0.5);
 
       questions.push({
         question: item.question,
         options,
-        answer
+        indexOfAnswer: options.indexOf(item.A)
       });
     }
     return questions;
   };
 
   handleOptionClick = (e) => {
-    if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
+      
+      const {questions, currentQuestionIndex, indexOfAnswer} = this.state;
+      const answer = questions[currentQuestionIndex].options[indexOfAnswer]
+    console.log(answer);
+    console.log(e.target.innerHTML.toLowerCase())
+
+      if (e.target.innerHTML.toLowerCase() === answer.toLowerCase()) {
       this.correctAnswerSound.current.play();
       this.correctAnswer(true);
     } else {
@@ -197,18 +202,6 @@ class Play extends Component {
       optionsHidden: [],
     });
   };
-
-  // getIndexOfAnswer = () => {
-  //   let indexOut;
-
-  //   const options = document.querySelectorAll('.option');
-  //   options.forEach((option, index) => {
-  //     if (option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
-  //       indexOut = index;
-  //     }
-  //   });
-  //   return indexOut;
-  // };
 
   generateRandomNumber = (maxValue) => {
     return Math.round(Math.random() * maxValue);
@@ -386,12 +379,11 @@ class Play extends Component {
           },
         });
       }
-      console.log(seconds);
+   
       if (minutes === 0 && seconds === 10)
         this.tenSecondCountdownSound.current.play();
       // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
 
-      console.log(seconds);
     }, 1000);
   };
 

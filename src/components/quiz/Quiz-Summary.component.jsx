@@ -67,7 +67,9 @@ class QuizSummary extends Component {
         <Fragment>
           <div className="instructions-info-container">
             <h4>{feedback}</h4>
-            <h2 className="score-percentage">{this.state.score.toFixed(0)}&#37;</h2>
+            <h2 className="score-percentage">
+              {this.state.score.toFixed(0)}&#37;
+            </h2>
             {/* <span className="stat left">Total number of questions: </span>
             <span className="right">{this.state.numOfQuestions}</span> <br />
 
@@ -82,26 +84,22 @@ class QuizSummary extends Component {
             <span className="stat left">Hints Used: </span>
             <span className="right">{this.state.hintsUsed}</span> <br /> */}
             You got&nbsp;
-            <span className="score-correct-answers">{this.state.correctAnswers}/
-            <span className="score-answered-questions">{this.state.numberOfAnsweredQuestions}</span>
+            <span className="score-correct-answers">
+              {this.state.correctAnswers}/
+              <span className="score-answered-questions">
+                {this.state.numberOfAnsweredQuestions}
+              </span>
             </span>
           </div>
           <section>
             <div className="btn-container">
-              <ul>
-                <li>
-                  <Link className="back-to-menu-btn" to="/">
-                  &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
-                  </Link>
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <Link className="play-quiz-btn" to="/play/quiz">
-                    Start
-                  </Link>
-                </li>
-              </ul>
+              <Link className="back-to-menu-btn" to="/">
+                &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+              </Link>
+
+              <Link className="play-quiz-btn" to="/play/quiz">
+                Start
+              </Link>
             </div>
           </section>
         </Fragment>
@@ -113,7 +111,7 @@ class QuizSummary extends Component {
           <ul>
             <li>
               <Link className="back-to-menu-btn" to="/">
-              &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+                &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
               </Link>
             </li>
           </ul>
