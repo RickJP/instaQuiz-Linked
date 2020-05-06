@@ -29,7 +29,7 @@
     }
 
     .quiz-title {
-      font-family: 'Fredoka One';
+      font-family: $main-font;
       font-size: $md2;
       color: $off-white;
       color: white;
@@ -44,7 +44,7 @@
     }
 
     a {
-      font-family: 'Fredoka One';
+      font-family: $main-font;
       text-decoration: none;
       text-align: center;
       cursor: pointer;

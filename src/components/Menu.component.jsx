@@ -7,7 +7,7 @@ const playButtonClickSound = () => {
   document.getElementById('buttonClickSound').play();
 };
 
-const Home = () => (
+const Menu = () => (
   <Fragment>
     <title>Insta Quiz</title>
     <div id="home" className="noselect">
@@ -46,4 +46,4 @@ const Home = () => (
   </Fragment>
 );
 
-export default Home;
+export default Menu;

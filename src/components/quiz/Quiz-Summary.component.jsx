@@ -64,40 +64,45 @@ class QuizSummary extends Component {
 
     if (state !== undefined) {
       stats = (
-        <Fragment >
-          <div className="container">
+        <Fragment>
+          <div className="instructions-info-container">
             <h4>{feedback}</h4>
-            <h2>{this.state.score.toFixed(0)}&#37;</h2>
-            <span className="stat left">Total number of questions: </span>
+            <h2 className="score-percentage">{this.state.score.toFixed(0)}&#37;</h2>
+            {/* <span className="stat left">Total number of questions: </span>
             <span className="right">{this.state.numOfQuestions}</span> <br />
 
             <span className="stat left">Number of attempted questions: </span>
-            <span className="right">{this.state.numberOfAnsweredQuestions}</span> <br />
-
-            <span className="stat left">Correct Answers: </span>
-            <span className="right">{this.state.correctAnswers}</span> <br />
-
-            <span className="stat left">Wrong Answers: </span>
-            <span className="right">{this.state.wrongAnswers}</span> <br />
-
-            <span className="stat left">50-50's Used: </span>
+            <span className="right">{this.state.numberOfAnsweredQuestions}</span> <br /> */}
+            {/* <span className="stat left">Correct Answers: </span>
+            <span className="right">{this.state.correctAnswers}</span> <br /> */}
+            {/* <span className="stat left">Wrong Answers: </span>
+            <span className="right">{this.state.wrongAnswers}</span> <br /> */}
+            {/* <span className="stat left">50-50's Used: </span>
             <span className="right">{this.state.fiftyFiftyUsed}</span> <br />
-
             <span className="stat left">Hints Used: </span>
-            <span className="right">{this.state.hintsUsed}</span> <br />
+            <span className="right">{this.state.hintsUsed}</span> <br /> */}
+            You got&nbsp;
+            <span className="score-correct-answers">{this.state.correctAnswers}/
+            <span className="score-answered-questions">{this.state.numberOfAnsweredQuestions}</span>
+            </span>
           </div>
           <section>
-          
-          <ul>
-            <li>
-            <Link className="back-to-menu-btn" to="/">Back To Menu</Link>
-            </li>
-          </ul>
-          <ul>
-            <li>
-            <Link className="play-quiz-btn" to="/play/quiz">Start</Link>
-            </li>
-          </ul>
+            <div className="btn-container">
+              <ul>
+                <li>
+                  <Link className="back-to-menu-btn" to="/">
+                  &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+                  </Link>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <Link className="play-quiz-btn" to="/play/quiz">
+                    Start
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </section>
         </Fragment>
       );
@@ -107,15 +112,18 @@ class QuizSummary extends Component {
           <h1 className="no-stats">No Stats are here. Try the Quiz!</h1>
           <ul>
             <li>
-            <Link className="back-to-menu-btn" to="/">Back To Menu</Link>
+              <Link className="back-to-menu-btn" to="/">
+              &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+              </Link>
             </li>
           </ul>
           <ul>
             <li>
-            <Link className="play-quiz-btn" to="/play/quiz">Start</Link>
+              <Link className="play-quiz-btn" to="/play/quiz">
+                Start
+              </Link>
             </li>
           </ul>
-          
           )
         </Fragment>
       );
