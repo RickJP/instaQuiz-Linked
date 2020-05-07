@@ -484,6 +484,8 @@ class Play extends Component {
       currentQuestionIndex,
       time,
       areWrongAnswers,
+      hints,
+      fiftyFifty
     } = this.state;
 
     return (
@@ -496,33 +498,27 @@ class Play extends Component {
           <Fragment>
             <audio
               ref={this.correctAnswerSound}
-              id="correctAnswerSound"
               src={correctAnswerSound}
             ></audio>
             <audio
               ref={this.wrongAnswerSound}
-              id="wrongAnswerSound"
               src={wrongAnswerSound}
             ></audio>
             <audio
               ref={this.buttonClickSound}
-              id="buttonClickSound"
               src={buttonClickSound}
             ></audio>
             <audio
               ref={this.tenSecondCountdownSound}
-              id="tenSecondCountdownSound"
               src={tenSecondCountdownSound}
             ></audio>
             <audio ref={this.hintSound} id="hintSound" src={hintSound}></audio>
             <audio
               ref={this.fiftyFifySound}
-              id="fiftyFifySound"
               src={fiftyFifySound}
             ></audio>
             <audio
               ref={this.endOfQuizSound}
-              id="endOfQuizSound"
               src={endOfQuizSound}
             ></audio>
           </Fragment>
@@ -535,19 +531,17 @@ class Play extends Component {
                   {' '}
                   <StarHalf
                     onClick={this.handleFiftyFify}
-                    className="icons"
-                    id="fifty-fifty-icon"
+                    className={`icons fifty-fifty-icon ${fiftyFifty === 0 ? "empty" : ""}`}
                   />
-                  <span className="lifeline-no">{this.state.fiftyFifty}</span>
+                  <span className="lifeline-no">{fiftyFifty}</span>
                 </p>
                 <p>
                   {' '}
                   <WbIncandescent
                     onClick={this.handleHints}
-                    className="icons"
-                    id="hints-icon"
+                    className={`icons hints-icon ${hints === 0 ? "empty" : ""}`}
                   />
-                  <span className="lifeline-no">{this.state.hints}</span>
+                  <span className="lifeline-no">{hints}</span>
                 </p>
               </div>
 
@@ -563,7 +557,7 @@ class Play extends Component {
                     {time.seconds}
                   </span>
 
-                  <AvTimer id="timer-icon" />
+                  <AvTimer className="timer-icon" />
                 </p>
               </div>
             </div>

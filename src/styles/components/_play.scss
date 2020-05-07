@@ -19,7 +19,6 @@
       transform: scale(1.5);
     }
   }
-  
 }
 
 .quiz {
@@ -38,14 +37,22 @@
 
   .icons {
     cursor: pointer;
+    
+    &.empty {
+      color: grey;
+    }
   }
-  #hints-icon {
-    @include style-icon(orange, true);
+  .hints-icon {
+    &:not(.empty) {
+      @include style-icon(orange, true);
+    }
   }
-  #fifty-fifty-icon {
-    @include style-icon(green, true);
+  .fifty-fifty-icon {
+    &:not(.empty) {
+      @include style-icon(green, true);
+    }
   }
-  #timer-icon {
+  .timer-icon {
     margin-left: 1.2rem;
     @include style-icon(blue, false);
   }
