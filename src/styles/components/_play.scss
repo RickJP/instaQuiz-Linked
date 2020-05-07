@@ -85,7 +85,8 @@
   .options-container {
     display: inline-block;
     width: 45%;
-   
+
+
 
     .option {
       background-color: $nice-blue;
@@ -104,9 +105,15 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 
-      &:hover {
-        background-color: darken($nice-blue, 20%);
-      }
+    &:not(.wrongAnswer):hover {
+      background-color: darken($nice-blue, 20%);
+    }
+    
+    &.wrongAnswer {
+      background-color: red;
+    }
+
+      
     }
   }
 
@@ -152,6 +159,9 @@
       @include set-nav-btn($red);
     }
   }
+
+
+
 }
 @media (max-width: $lg-breakpoint) {
 

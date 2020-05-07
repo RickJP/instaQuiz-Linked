@@ -36,6 +36,12 @@ class Play extends Component {
       fiftyFifty: 2,
       optionsHidden: [],
       indexOfAnswer: 0,
+      areWrongAnswers: {
+        A: false,
+        B: false,
+        C: false,
+        D: false,
+      },
       // prevRandomNo: [],
       // prevButtonDisabled: true,
       // nextButtonDisabled: false,
@@ -85,7 +91,7 @@ class Play extends Component {
       prevQuestion = questions[currentQuestionIndex - 1];
       nextQuestion = questions[currentQuestionIndex + 1];
 
-      indexOfAnswer = questions[currentQuestionIndex].indexOfAnswer
+      indexOfAnswer = questions[currentQuestionIndex].indexOfAnswer;
 
       this.setState(
         {
@@ -94,7 +100,7 @@ class Play extends Component {
           nextQuestion,
           numOfQuestions: questions.length,
           prevRandomNo: [],
-          indexOfAnswer
+          indexOfAnswer,
         },
         () => {
           this.showOptions();
@@ -118,20 +124,19 @@ class Play extends Component {
       questions.push({
         question: item.question,
         options,
-        indexOfAnswer: options.indexOf(item.A)
+        indexOfAnswer: options.indexOf(item.A),
       });
     }
     return questions;
   };
 
   handleOptionClick = (e) => {
-      
-      const {questions, currentQuestionIndex, indexOfAnswer} = this.state;
-      const answer = questions[currentQuestionIndex].options[indexOfAnswer]
+    const {questions, currentQuestionIndex, indexOfAnswer} = this.state;
+    const answer = questions[currentQuestionIndex].options[indexOfAnswer];
     console.log(answer);
-    console.log(e.target.innerHTML.toLowerCase())
+    console.log(e.target.innerHTML.toLowerCase());
 
-      if (e.target.innerHTML.toLowerCase() === answer.toLowerCase()) {
+    if (e.target.innerHTML.toLowerCase() === answer.toLowerCase()) {
       this.correctAnswerSound.current.play();
       this.correctAnswer(true);
     } else {
@@ -211,7 +216,7 @@ class Play extends Component {
 
     // if there are some fifty-fifties left and one has not been used
     if (this.state.fiftyFifty > 0 && this.state.optionsHidden.length === 0) {
-      //const indexOfAnswer = this.getIndexOfAnswer();  
+      //const indexOfAnswer = this.getIndexOfAnswer();
       let randomNumber;
       let randomNumbers = [];
 
@@ -251,7 +256,6 @@ class Play extends Component {
   handleHints = () => {
     if (this.state.hints > 0 && this.state.optionsHidden.length <= 2) {
       const options = Array.from(document.querySelectorAll('.option'));
-      
 
       while (true) {
         const randNum = this.generateRandomNumber(3);
@@ -294,6 +298,36 @@ class Play extends Component {
     this.playButtonSound();
   };
 
+  highlightWrongAnswers = () => {
+    console.log('Not correct');
+    console.log(this.state.indexOfAnswer);
+
+    const areWrongAnswers = {
+      A: true,
+      B: true,
+      C: true,
+      D: true,
+    };
+    console.log('Index of answer  ' + this.state.indexOfAnswer);
+    switch (this.state.indexOfAnswer) {
+      case 0:
+        areWrongAnswers.A = false;
+        break;
+      case 1:
+        areWrongAnswers.B = false;
+        break;
+      case 2:
+        areWrongAnswers.C = false;
+        break;
+      case 3:
+        areWrongAnswers.D = false;
+        break;
+      default:
+        console.error('Something went wrong');
+    }
+    return areWrongAnswers;
+  };
+
   correctAnswer = (correct) => {
     M.toast({
       html: correct ? 'Correct Answer!' : 'Wrong Answer',
@@ -304,30 +338,50 @@ class Play extends Component {
     let score = 0;
     let correctAnswers = 0;
     let wrongAnswers = 1;
+    let areWrongAnswers = {
+      A: false,
+      B: false,
+      C: false,
+      D: false,
+    };
+
     if (correct) {
       score = 1;
       correctAnswers = 1;
       wrongAnswers = 0;
+    } else {
+      areWrongAnswers = this.highlightWrongAnswers();
+      console.log(areWrongAnswers);
     }
 
     if (this.state.currentQuestionIndex !== this.state.questions.length - 1) {
-      this.setState(
-        (prevState) => ({
-          score: prevState.score + score,
-          wrongAnswers: prevState.wrongAnswers + wrongAnswers,
-          correctAnswers: prevState.correctAnswers + correctAnswers,
-          currentQuestionIndex: prevState.currentQuestionIndex + 1,
-          numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-        }),
-        () => {
-          this.displayQuestions(
-            this.state.questions,
-            this.state.currentQuestion,
-            this.state.prevQuestion,
-            this.state.nextQuestion
-          );
-        }
-      );
+      setTimeout(() => {
+        areWrongAnswers = {A: false,B: false,C: false,D: false};
+        this.setState(
+          (prevState) => ({
+            score: prevState.score + score,
+            wrongAnswers: prevState.wrongAnswers + wrongAnswers,
+            correctAnswers: prevState.correctAnswers + correctAnswers,
+            currentQuestionIndex: prevState.currentQuestionIndex + 1,
+            numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+            areWrongAnswers
+          }),
+          () => {
+            this.displayQuestions(
+              this.state.questions,
+              this.state.currentQuestion,
+              this.state.prevQuestion,
+              this.state.nextQuestion
+            );
+          }
+        );
+      }, 1000);
+
+      // Setup display for highlighting wrong answers
+      this.setState({
+        areWrongAnswers,
+      });
+
     } else {
       this.setState(
         (prevState) => ({
@@ -335,6 +389,7 @@ class Play extends Component {
           correctAnswers: prevState.correctAnswers + correctAnswers,
           wrongAnswers: prevState.wrongAnswers + wrongAnswers,
           numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
+          areWrongAnswers,
         }),
         () => {
           this.endQuiz();
@@ -378,11 +433,10 @@ class Play extends Component {
           },
         });
       }
-   
+
       if (minutes === 0 && seconds === 10)
         this.tenSecondCountdownSound.current.play();
       // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
-
     }, 1000);
   };
 
@@ -429,6 +483,7 @@ class Play extends Component {
       numOfQuestions,
       currentQuestionIndex,
       time,
+      areWrongAnswers,
     } = this.state;
 
     return (
@@ -515,23 +570,34 @@ class Play extends Component {
 
             <h4 className="question">{currentQuestion.question}</h4>
             <div className="options-container">
-              <p onClick={this.handleOptionClick} className="option">
+              <p
+                onClick={this.handleOptionClick}
+                className={`option ${areWrongAnswers.A ? 'wrongAnswer' : ''}`}
+              >
                 {questions[currentQuestionIndex].options[0]}
               </p>
-              <p onClick={this.handleOptionClick} className="option">
+              <p
+                onClick={this.handleOptionClick}
+                className={`option ${areWrongAnswers.B ? 'wrongAnswer' : ''}`}
+              >
                 {questions[currentQuestionIndex].options[1]}
               </p>
             </div>
             <div className="options-container options-container2">
-              <p onClick={this.handleOptionClick} className="option">
+              <p
+                onClick={this.handleOptionClick}
+                className={`option ${areWrongAnswers.C ? 'wrongAnswer' : ''}`}
+              >
                 {questions[currentQuestionIndex].options[2]}
               </p>
-              <p onClick={this.handleOptionClick} className="option">
+              <p
+                onClick={this.handleOptionClick}
+                className={`option ${areWrongAnswers.D ? 'wrongAnswer' : ''}`}
+              >
                 {questions[currentQuestionIndex].options[3]}
               </p>
             </div>
-          
-         
+
             {/* <div className="btn-container">
               <button
                 id="previous-button"
