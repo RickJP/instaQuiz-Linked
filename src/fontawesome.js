@@ -11,12 +11,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 // brand icons
 // npm i -S @fortawesome/free-brands-svg-icons
 
-import { faHome, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faGem } from '@fortawesome/free-regular-svg-icons';
+import { faAdjust, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { faAccusoft } from '@fortawesome/free-brands-svg-icons';
 
 
 library.add(
   faCoffee,
-  faHome,
+  faAdjust,
+  faGem,
   faAccusoft
 );

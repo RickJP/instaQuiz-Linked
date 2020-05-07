@@ -1,8 +1,10 @@
 import React, {Component, Fragment} from 'react';
+import ReactDOM from 'react-dom';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import questionsData from '../../data/questions.json';
+import questionsData from '../../data/1.json';
 import {isEmpty} from '../../utils/is-empty';
 
 import M from 'materialize-css';
@@ -63,7 +65,8 @@ class Play extends Component {
   componentDidMount() {
     const {questions, currentQuestion, prevQuestion, nextQuestion} = this.state;
 
-    this.displayQuestions(
+    console.log('PARAMS ' + this.props.match.params.no);
+    this.displayQuestionAndOptions(
       questions,
       currentQuestion,
       prevQuestion,
@@ -76,7 +79,7 @@ class Play extends Component {
     clearInterval(this.interval);
   }
 
-  displayQuestions = (
+  displayQuestionAndOptions = (
     questions = this.state.questions,
     currentQuestion,
     nextQuestion,
@@ -133,8 +136,6 @@ class Play extends Component {
   handleOptionClick = (e) => {
     const {questions, currentQuestionIndex, indexOfAnswer} = this.state;
     const answer = questions[currentQuestionIndex].options[indexOfAnswer];
-    console.log(answer);
-    console.log(e.target.innerHTML.toLowerCase());
 
     if (e.target.innerHTML.toLowerCase() === answer.toLowerCase()) {
       this.correctAnswerSound.current.play();
@@ -160,7 +161,7 @@ class Play extends Component {
           currentQuestionIndex: prevState.currentQuestionIndex - 1,
         }),
         () => {
-          this.displayQuestions(
+          this.displayQuestionAndOptions(
             this.state.questions,
             this.state.currentQuestion,
             this.state.nextQuestion,
@@ -178,7 +179,7 @@ class Play extends Component {
           currentQuestionIndex: prevState.currentQuestionIndex + 1,
         }),
         () => {
-          this.displayQuestions(
+          this.displayQuestionAndOptions(
             this.state.questions,
             this.state.currentQuestion,
             this.state.nextQuestion,
@@ -231,7 +232,6 @@ class Play extends Component {
           count++;
         }
       } while (count < 2);
-      console.log(randomNumbers);
 
       this.setState(
         {
@@ -281,7 +281,6 @@ class Play extends Component {
   };
 
   handleButtonClick = (e) => {
-    console.log(e.target.id);
     switch (e.target.id) {
       case 'next-button':
         this.handleNextButton();
@@ -299,16 +298,12 @@ class Play extends Component {
   };
 
   highlightWrongAnswers = () => {
-    console.log('Not correct');
-    console.log(this.state.indexOfAnswer);
-
     const areWrongAnswers = {
       A: true,
       B: true,
       C: true,
       D: true,
     };
-    console.log('Index of answer  ' + this.state.indexOfAnswer);
     switch (this.state.indexOfAnswer) {
       case 0:
         areWrongAnswers.A = false;
@@ -329,6 +324,7 @@ class Play extends Component {
   };
 
   correctAnswer = (correct) => {
+    // Display the toast popup
     M.toast({
       html: correct ? 'Correct Answer!' : 'Wrong Answer',
       classes: correct ? 'toast-valid' : 'toast-invalid',
@@ -345,18 +341,26 @@ class Play extends Component {
       D: false,
     };
 
+    // Check if it is the correct answer
+    // setup variables in either case
     if (correct) {
       score = 1;
       correctAnswers = 1;
       wrongAnswers = 0;
+
+      //TODO -> add function to create gems after each correct answer
+      // const gemsGained = React.createElement('h3', {}, '*');
+      // ReactDOM.render(
+      //   gemsGained,
+      //   document.getElementById('create')
+      // )
     } else {
       areWrongAnswers = this.highlightWrongAnswers();
-      console.log(areWrongAnswers);
     }
 
     if (this.state.currentQuestionIndex !== this.state.questions.length - 1) {
       setTimeout(() => {
-        areWrongAnswers = {A: false,B: false,C: false,D: false};
+        areWrongAnswers = {A: false, B: false, C: false, D: false};
         this.setState(
           (prevState) => ({
             score: prevState.score + score,
@@ -364,10 +368,10 @@ class Play extends Component {
             correctAnswers: prevState.correctAnswers + correctAnswers,
             currentQuestionIndex: prevState.currentQuestionIndex + 1,
             numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-            areWrongAnswers
+            areWrongAnswers,
           }),
           () => {
-            this.displayQuestions(
+            this.displayQuestionAndOptions(
               this.state.questions,
               this.state.currentQuestion,
               this.state.prevQuestion,
@@ -381,7 +385,6 @@ class Play extends Component {
       this.setState({
         areWrongAnswers,
       });
-
     } else {
       this.setState(
         (prevState) => ({
@@ -469,7 +472,6 @@ class Play extends Component {
       fiftyFiftyUsed: 2 - state.fiftyFifty,
       hintsUsed: 5 - state.hints,
     };
-    console.log(playerStats);
     this.endOfQuizSound.current.play();
     setTimeout(() => {
       this.props.history.push('/play/quizsummary', playerStats);
@@ -485,7 +487,7 @@ class Play extends Component {
       time,
       areWrongAnswers,
       hints,
-      fiftyFifty
+      fiftyFifty,
     } = this.state;
 
     return (
@@ -500,46 +502,42 @@ class Play extends Component {
               ref={this.correctAnswerSound}
               src={correctAnswerSound}
             ></audio>
-            <audio
-              ref={this.wrongAnswerSound}
-              src={wrongAnswerSound}
-            ></audio>
-            <audio
-              ref={this.buttonClickSound}
-              src={buttonClickSound}
-            ></audio>
+            <audio ref={this.wrongAnswerSound} src={wrongAnswerSound}></audio>
+            <audio ref={this.buttonClickSound} src={buttonClickSound}></audio>
             <audio
               ref={this.tenSecondCountdownSound}
               src={tenSecondCountdownSound}
             ></audio>
             <audio ref={this.hintSound} id="hintSound" src={hintSound}></audio>
-            <audio
-              ref={this.fiftyFifySound}
-              src={fiftyFifySound}
-            ></audio>
-            <audio
-              ref={this.endOfQuizSound}
-              src={endOfQuizSound}
-            ></audio>
+            <audio ref={this.fiftyFifySound} src={fiftyFifySound}></audio>
+            <audio ref={this.endOfQuizSound} src={endOfQuizSound}></audio>
           </Fragment>
           <div className="quiz noselect">
             <h2 className="quiz-title">InstaQuiz</h2>
 
+            <div id="create"></div>
+
             <div className="top-panel">
               <div className="lifeline-container">
                 <p>
-                  {' '}
-                  <StarHalf
+                  <FontAwesomeIcon
+                    onClick={this.handleFiftyFify}
+                    icon={['fa', 'adjust']}
+                    className={`icons fifty-fifty-icon ${
+                      fiftyFifty === 0 ? 'empty' : ''
+                    }`}
+                  />{' '}
+                  {/* <StarHalf
                     onClick={this.handleFiftyFify}
                     className={`icons fifty-fifty-icon ${fiftyFifty === 0 ? "empty" : ""}`}
-                  />
+                  /> */}
                   <span className="lifeline-no">{fiftyFifty}</span>
                 </p>
                 <p>
                   {' '}
                   <WbIncandescent
                     onClick={this.handleHints}
-                    className={`icons hints-icon ${hints === 0 ? "empty" : ""}`}
+                    className={`icons hints-icon ${hints === 0 ? 'empty' : ''}`}
                   />
                   <span className="lifeline-no">{hints}</span>
                 </p>
@@ -563,33 +561,38 @@ class Play extends Component {
             </div>
 
             <h4 className="question">{currentQuestion.question}</h4>
+
+            
             <div className="options-container">
-              <p
-                onClick={this.handleOptionClick}
-                className={`option ${areWrongAnswers.A ? 'wrongAnswer' : ''}`}
-              >
-                {questions[currentQuestionIndex].options[0]}
-              </p>
-              <p
-                onClick={this.handleOptionClick}
-                className={`option ${areWrongAnswers.B ? 'wrongAnswer' : ''}`}
-              >
-                {questions[currentQuestionIndex].options[1]}
-              </p>
-            </div>
-            <div className="options-container options-container2">
-              <p
-                onClick={this.handleOptionClick}
-                className={`option ${areWrongAnswers.C ? 'wrongAnswer' : ''}`}
-              >
-                {questions[currentQuestionIndex].options[2]}
-              </p>
-              <p
-                onClick={this.handleOptionClick}
-                className={`option ${areWrongAnswers.D ? 'wrongAnswer' : ''}`}
-              >
-                {questions[currentQuestionIndex].options[3]}
-              </p>
+              <div className="column">
+                <p
+                  onClick={this.handleOptionClick}
+                  className={`option ${areWrongAnswers.A ? 'wrongAnswer' : ''}`}
+                >
+                  {questions[currentQuestionIndex].options[0]}
+                </p>
+                <p
+                  onClick={this.handleOptionClick}
+                  className={`option ${areWrongAnswers.B ? 'wrongAnswer' : ''}`}
+                >
+                  {questions[currentQuestionIndex].options[1]}
+                </p>
+              </div>
+
+              <div className="column">
+                <p
+                  onClick={this.handleOptionClick}
+                  className={`option ${areWrongAnswers.C ? 'wrongAnswer' : ''}`}
+                >
+                  {questions[currentQuestionIndex].options[2]}
+                </p>
+                <p
+                  onClick={this.handleOptionClick}
+                  className={`option ${areWrongAnswers.D ? 'wrongAnswer' : ''}`}
+                >
+                  {questions[currentQuestionIndex].options[3]}
+                </p>
+              </div>
             </div>
 
             {/* <div className="btn-container">
