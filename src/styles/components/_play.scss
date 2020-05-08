@@ -128,11 +128,8 @@
     
     &.wrongAnswer {
       background-color: red;
+    }      
     }
-
-      
-    }
-    
   }
 
   .btn-container {
@@ -191,7 +188,7 @@
     .top-panel {
       background-color: rgba(0, 0, 255, 0.1);
       border-radius: 1rem;
-      padding: 0.7rem;
+      padding: 0.5rem;
 
       #fifty-fifty-icon, #hints-icon, #timer-icon  {
         font-size: 3rem;
@@ -222,14 +219,15 @@
 
     .question {
       margin-top: $normal;
-      font-size: 1.2rem;
+      font-size: .9rem;
     }
     .options-container {
       display: inline-block;
       width: 100%;
+
       .option {
         margin: $normal auto;
-        padding: $md;
+        padding: $sm;
         transition: 0.3s linear all;
         text-align: center;
         display: block;
@@ -239,11 +237,8 @@
         justify-content: center;
         font-size: 0.8rem;
 
-        &:hover {
-          background-color: darken($nice-blue, 20%);
-        }
+        margin: .6rem auto;
       }
-      margin: 0;
     }
     .options-container2 {
       .option:nth-child(1) {

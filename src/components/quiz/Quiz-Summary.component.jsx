@@ -94,12 +94,12 @@ class QuizSummary extends Component {
           <section>
             <div className="btn-container">
               <Link className="back-to-menu-btn" to="/">
-                &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+                Play Again
               </Link>
 
-              <Link className="play-quiz-btn" to="/play/quiz">
+              {/* <Link className="play-quiz-btn" to="/play/quiz">
                 Start
-              </Link>
+              </Link> */}
             </div>
           </section>
         </Fragment>
@@ -111,17 +111,17 @@ class QuizSummary extends Component {
           <ul>
             <li>
               <Link className="back-to-menu-btn" to="/">
-                &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Menu
+                &lsaquo;&lsaquo;&nbsp;&nbsp;&nbsp;Play Again
               </Link>
             </li>
           </ul>
-          <ul>
+          {/* <ul>
             <li>
               <Link className="play-quiz-btn" to="/play/quiz">
                 Start
               </Link>
             </li>
-          </ul>
+          </ul> */}
           )
         </Fragment>
       );

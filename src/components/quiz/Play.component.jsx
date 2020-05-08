@@ -4,7 +4,11 @@ import {Helmet, HelmetProvider} from 'react-helmet-async';
 import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import questionsData from '../../data/1.json';
+import q1 from '../../data/1.json';
+import q2 from '../../data/2.json';
+import q3 from '../../data/3.json';
+import q4 from '../../data/4.json';
+
 import {isEmpty} from '../../utils/is-empty';
 
 import M from 'materialize-css';
@@ -21,13 +25,16 @@ const helmetContext = {};
 
 class Play extends Component {
   constructor(props) {
-    super(props);
+    super(props);  
+
+    const { no } = this.props.match.params;
+    const questionsData = (no == 1) ? q1 : (no == 2) ? q2 :  (no == 3) ? q3 :  (no == 4) ? q4 : console.log('No questions avaliable')
+    
     this.state = {
-      questions: this.shuffleAnswers(questionsData),
+      questions: this.shuffleQandA(questionsData),
       currentQuestion: {},
       // nextQuestion: {},
       // prevQuestion: {},
-      answer: '',
       numOfQuestions: 0,
       numberOfAnsweredQuestions: 0,
       currentQuestionIndex: 0,
@@ -64,8 +71,6 @@ class Play extends Component {
 
   componentDidMount() {
     const {questions, currentQuestion, prevQuestion, nextQuestion} = this.state;
-
-    console.log('PARAMS ' + this.props.match.params.no);
     this.displayQuestionAndOptions(
       questions,
       currentQuestion,
@@ -113,16 +118,21 @@ class Play extends Component {
     }
   };
 
-  shuffleAnswers = (questionsToUse) => {
+  shuffleQandA = (questionsData) => {
     let questions = [];
     let options = [];
-
-    for (let i in questionsToUse) {
-      let item = questionsToUse[i];
+  
+    // Shuffles questions
+    questionsData.sort(() => Math.random() - 0.5);
+   
+    for (let i in questionsData) {
+      let item = questionsData[i];
 
       options = [item.A, item.B, item.C, item.D];
-      // Answer is always the first element before it is shuffled
+
+      // Shuffle answers
       options.sort(() => Math.random() - 0.5);
+
 
       questions.push({
         question: item.question,
@@ -133,16 +143,22 @@ class Play extends Component {
     return questions;
   };
 
-  handleOptionClick = (e) => {
-    const {questions, currentQuestionIndex, indexOfAnswer} = this.state;
-    const answer = questions[currentQuestionIndex].options[indexOfAnswer];
+  isLastQuestion = () => {
+    return this.state.currentQuestionIndex > this.state.questions.length - 1;
+  };
 
-    if (e.target.innerHTML.toLowerCase() === answer.toLowerCase()) {
-      this.correctAnswerSound.current.play();
-      this.correctAnswer(true);
-    } else {
-      this.wrongAnswerSound.current.play();
-      this.correctAnswer(false);
+  // Check whether it is a correct answer or not
+  handleOptionClick = (e) => {
+    if (!this.isLastQuestion()) {
+      const {indexOfAnswer} = this.state;
+
+      if (e.target.id == indexOfAnswer) {
+        this.correctAnswerSound.current.play();
+        this.correctAnswer(true);
+      } else {
+        this.wrongAnswerSound.current.play();
+        this.correctAnswer(false);
+      }
     }
   };
 
@@ -334,12 +350,7 @@ class Play extends Component {
     let score = 0;
     let correctAnswers = 0;
     let wrongAnswers = 1;
-    let areWrongAnswers = {
-      A: false,
-      B: false,
-      C: false,
-      D: false,
-    };
+    let areWrongAnswers = {};
 
     // Check if it is the correct answer
     // setup variables in either case
@@ -371,6 +382,7 @@ class Play extends Component {
             areWrongAnswers,
           }),
           () => {
+            console.log(this.state.currentQuestionIndex);
             this.displayQuestionAndOptions(
               this.state.questions,
               this.state.currentQuestion,
@@ -379,7 +391,7 @@ class Play extends Component {
             );
           }
         );
-      }, 1000);
+      }, 700);
 
       // Setup display for highlighting wrong answers
       this.setState({
@@ -392,7 +404,7 @@ class Play extends Component {
           correctAnswers: prevState.correctAnswers + correctAnswers,
           wrongAnswers: prevState.wrongAnswers + wrongAnswers,
           numberOfAnsweredQuestions: prevState.numberOfAnsweredQuestions + 1,
-          areWrongAnswers,
+          // areWrongAnswers,  //CHANGED
         }),
         () => {
           this.endQuiz();
@@ -437,12 +449,15 @@ class Play extends Component {
         });
       }
 
+      // Play 10 second countdown sound
       if (minutes === 0 && seconds === 10)
         this.tenSecondCountdownSound.current.play();
       // if (seconds <= 1) this.tenSecondCountdownSound.current.stop();
     }, 1000);
   };
 
+  // Disable previous and next buttons when appropriate
+  // disable previous on first question & next button on last question
   handleDisableButton = () => {
     if (
       this.state.prevQuestion === undefined ||
@@ -456,11 +471,13 @@ class Play extends Component {
       this.state.nextQuestion === undefined ||
       this.state.currentQuestionIndex + 1 === this.state.numOfQuestions
     ) {
+      // Disable both buttons on the last question
       this.setState({nextButtonDisabled: true});
       this.setState({prevButtonDisabled: true});
     }
   };
 
+  // Record the player stats for the end of quiz
   endQuiz = () => {
     const {state} = this;
     const playerStats = {
@@ -474,6 +491,7 @@ class Play extends Component {
     };
     this.endOfQuizSound.current.play();
     setTimeout(() => {
+      // Display the quiz summary page
       this.props.history.push('/play/quizsummary', playerStats);
     }, 3000);
   };
@@ -562,16 +580,18 @@ class Play extends Component {
 
             <h4 className="question">{currentQuestion.question}</h4>
 
-            
+
             <div className="options-container">
               <div className="column">
                 <p
+                  id="0"
                   onClick={this.handleOptionClick}
                   className={`option ${areWrongAnswers.A ? 'wrongAnswer' : ''}`}
                 >
                   {questions[currentQuestionIndex].options[0]}
                 </p>
                 <p
+                  id="1"
                   onClick={this.handleOptionClick}
                   className={`option ${areWrongAnswers.B ? 'wrongAnswer' : ''}`}
                 >
@@ -581,12 +601,14 @@ class Play extends Component {
 
               <div className="column">
                 <p
+                  id="2"
                   onClick={this.handleOptionClick}
                   className={`option ${areWrongAnswers.C ? 'wrongAnswer' : ''}`}
                 >
                   {questions[currentQuestionIndex].options[2]}
                 </p>
                 <p
+                  id="3"
                   onClick={this.handleOptionClick}
                   className={`option ${areWrongAnswers.D ? 'wrongAnswer' : ''}`}
                 >

@@ -3,12 +3,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Link} from 'react-router-dom';
 import buttonClickSound from '../assets/audio/fireArrow_button-click.mp3';
 
+
 const playButtonClickSound = () => {
   document.getElementById('buttonClickSound').play();
-  console.log('Button Clicked');
 };
 
 const Menu = () => (
+
   <Fragment>
     <title>Insta Quiz</title>
     <div className="home noselect">
@@ -29,6 +30,7 @@ const Menu = () => (
                 {/* <Link onClick={playButtonClickSound} className="play-button" to="/play/quiz">
                   Play
                 </Link> */}
+              
                 <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/1`}>
                   1
                 </Link>
