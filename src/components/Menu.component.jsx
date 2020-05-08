@@ -31,18 +31,38 @@ const Menu = () => (
                   Play
                 </Link> */}
               
-                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/1`}>
+                
+                <div className="quiz-group">
+                <p className="quiz-title">What do the Words Mean?</p>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/d1`}>
                   1
                 </Link>
-                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/2`}>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/d2`}>
                   2
                 </Link>
-                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/3`}>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/d3`}>
                   3
                 </Link>
-                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/4`}>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/d4`}>
                   4
                 </Link>
+                </div>
+               
+                <div className="quiz-group">
+                <p className="quiz-title">What are the Missing Words?</p>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/c1`}>
+                  1
+                </Link>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/c2`}>
+                  2
+                </Link>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/c3`}>
+                  3
+                </Link>
+                <Link onClick={playButtonClickSound} className="small-btn" to={`/play/quiz/c4`}>
+                  4
+                </Link>
+                </div>
               </li>
             </ul>
           </div>

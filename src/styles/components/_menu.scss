@@ -43,6 +43,11 @@
       padding: $lg 0;
 
       width: 100%;
+
+      p.quiz-title {
+        font-size: 1rem;
+        color: $off-white;
+      }
     }
 
     a {
@@ -76,19 +81,19 @@
         }
       }
 
-      &.play-button {
-        background-color: $green;
-        color: #fff;
-        border-radius: $button-radius;
-        padding: $normal;
-        display: block;
-        cursor: pointer;
-        transition: 0.3s linear all;
+      // &.play-button {
+      //   background-color: $green;
+      //   color: #fff;
+      //   border-radius: $button-radius;
+      //   padding: $normal;
+      //   display: block;
+      //   cursor: pointer;
+      //   transition: 0.3s linear all;
 
-        &:hover {
-          background-color: darken($green, 10%);
-        }
-      }
+      //   &:hover {
+      //     background-color: darken($green, 10%);
+      //   }
+      // }
 
       &.small-btn {
         background-color: $green;
@@ -131,17 +136,27 @@
       width: 100%;
 
       .play-button-container {
-        padding: $xxlg $sm;
-        .play-button {
-          height: 6rem;
-          padding: $sm;
-          height: 6rem;
-          font-size: 2rem;
+        padding: $lg 0;
+        color: blue;
+  
+        width: 100%;
+  
+        p.quiz-title {
+          font-size: 1rem;
+          color: $off-white;
         }
       }
+      // .play-button-container {
+      //   padding: $xxlg $sm;
+      //   .play-button {
+      //     height: 6rem;
+      //     padding: $sm;
+      //     height: 6rem;
+      //     font-size: 2rem;
+      //   }
+      // }
     }
-   
-
+    
   }
 }
 
@@ -150,35 +165,45 @@
     padding: $lg $lg;
     width: 100%;
     height: 100%;
-
+    box-sizing: border-box;
 
     .play-button-container {
-      padding: $sm; 
-      .small-btn{
-        background-color: $nice-blue;
-        box-sizing: border-box;
+      padding: $lg 0;
+      width: 100%;
 
-        color: #fff;
-        font-size: 2rem;
-        border-radius: 1rem;
-        padding: 2.5rem;
-        margin: 1rem;
-        display: inline-block;
+      .quiz-group {
+        padding: 2em .2em;
+        
       }
+
+      p.quiz-title {
+        font-size: 1.3rem;
+        color: $off-white;
+        padding: $lg 0 auto;
+      }
+    }
+
+    a.small-btn {
+      background-color: $green;
+      color: #fff;
+      border-radius: .25em;
+      padding: 1.2em;
+      margin: 1em;
+      display: inline-block;
     }
   }
 }
 
-@media (min-width: $lg-breakpoint) {
-  .menu {
-    padding: 0;
-    width: 80%;
-    height: 100%;
-  }
+// @media (min-width: $lg-breakpoint) {
+//   .menu {
+//     padding: 0;
+//     width: 80%;
+//     height: 100%;
+//   }
 
-  .play-button-container {
-    padding: $sm 0;
-  }
+//   .play-button-container {
+//     padding: $sm 0;
+//   }
 
   
-}
+// }

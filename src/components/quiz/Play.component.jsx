@@ -1,13 +1,18 @@
 import React, {Component, Fragment} from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
-import {StarHalf, WbIncandescent, AvTimer} from '@material-ui/icons';
+import { WbIncandescent, AvTimer} from '@material-ui/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import q1 from '../../data/1.json';
-import q2 from '../../data/2.json';
-import q3 from '../../data/3.json';
-import q4 from '../../data/4.json';
+import dq1 from '../../data/definitions/1.json';
+import dq2 from '../../data/definitions/2.json';
+import dq3 from '../../data/definitions/3.json';
+import dq4 from '../../data/definitions/4.json';
+
+import cq1 from '../../data/cloze/1.json';
+import cq2 from '../../data/cloze/2.json';
+import cq3 from '../../data/cloze/3.json';
+import cq4 from '../../data/cloze/4.json';
 
 import {isEmpty} from '../../utils/is-empty';
 
@@ -27,8 +32,13 @@ class Play extends Component {
   constructor(props) {
     super(props);  
 
-    const { no } = this.props.match.params;
-    const questionsData = (no == 1) ? q1 : (no == 2) ? q2 :  (no == 3) ? q3 :  (no == 4) ? q4 : console.log('No questions avaliable')
+    const { id } = this.props.match.params;
+    const questionsData = (id === 'd1') ? dq1 : (id === 'd2') ? dq2 :
+                          (id === 'd3') ? dq3 : (id === 'd4') ? dq4 :
+                          (id === 'c1') ? cq1 : (id === 'c2') ? cq2 :
+                          (id === 'c3') ? cq3 : (id === 'c4') ? cq4 :
+                          console.log('No questions avaliable')
+
     
     this.state = {
       questions: this.shuffleQandA(questionsData),
@@ -151,8 +161,8 @@ class Play extends Component {
   handleOptionClick = (e) => {
     if (!this.isLastQuestion()) {
       const {indexOfAnswer} = this.state;
-
-      if (e.target.id == indexOfAnswer) {
+      if (parseInt(e.target.id) === indexOfAnswer) {
+        
         this.correctAnswerSound.current.play();
         this.correctAnswer(true);
       } else {

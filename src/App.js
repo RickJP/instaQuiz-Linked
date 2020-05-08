@@ -17,7 +17,7 @@ function App() {
       <Route exact path='/' component={ Menu }></Route>
       <Route exact path='/play/instructions' component={ QuizInstructions }></Route>
       <Route exact path='/play/quiz' component={ Play }></Route>
-      <Route exact path='/play/quiz/:no?' component={ Play }></Route>
+      <Route exact path='/play/quiz/:id?' component={ Play }></Route>
       <Route exact path='/play/quizsummary' component={ QuizSummary }></Route>
       <Route path="*" component={NotFound}/>
       </Switch>
