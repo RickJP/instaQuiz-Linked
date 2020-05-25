@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 const questionSchema = new Schema(
   {
-    // category: {
-    //   type: String,
-    // },
-    // difficulty: {
-    //   type: Number,
-    // },
+    category: {
+      type: String,
+    },
+    difficulty: {
+      type: Number,
+    },
     question: {
       type: String,
     },
@@ -25,7 +25,7 @@ const questionSchema = new Schema(
       type: String,
     },
   },
-  // {time: {type: Date, default: Date.now}}
+  {time: {type: Date, default: Date.now}}
 );
 
 

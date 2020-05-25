@@ -1,8 +1,9 @@
 import React, {Component, Fragment} from 'react';
 // import ReactDOM from 'react-dom';
 import {Helmet, HelmetProvider} from 'react-helmet-async';
-import { WbIncandescent, AvTimer} from '@material-ui/icons';
+import {WbIncandescent, AvTimer} from '@material-ui/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 
 import dq1 from '../../data/definitions/1.json';
 import dq2 from '../../data/definitions/2.json';
@@ -30,18 +31,31 @@ const helmetContext = {};
 
 class Play extends Component {
   constructor(props) {
-    super(props);  
+    super(props);
 
-    const { id } = this.props.match.params;
-    const questionsData = (id === 'd1') ? dq1 : (id === 'd2') ? dq2 :
-                          (id === 'd3') ? dq3 : (id === 'd4') ? dq4 :
-                          (id === 'c1') ? cq1 : (id === 'c2') ? cq2 :
-                          (id === 'c3') ? cq3 : (id === 'c4') ? cq4 :
-                          console.log('No questions avaliable')
+    const {id} = this.props.match.params;
+    const questionsData =
+      id === 'd1'
+        ? dq1
+        : id === 'd2'
+        ? dq2
+        : id === 'd3'
+        ? dq3
+        : id === 'd4'
+        ? dq4
+        : id === 'c1'
+        ? cq1
+        : id === 'c2'
+        ? cq2
+        : id === 'c3'
+        ? cq3
+        : id === 'c4'
+        ? cq4
+        : console.log('No questions avaliable');
 
-    
     this.state = {
-      questions: this.shuffleQandA(questionsData),
+      isLoading: true,
+      questions: [],
       currentQuestion: {},
       // nextQuestion: {},
       // prevQuestion: {},
@@ -79,15 +93,43 @@ class Play extends Component {
     this.tenSecondCountdownSound = React.createRef();
   }
 
-  componentDidMount() {
-    const {questions, currentQuestion, prevQuestion, nextQuestion} = this.state;
-    this.displayQuestionAndOptions(
-      questions,
-      currentQuestion,
-      prevQuestion,
-      nextQuestion
-    );
-    this.startTimer();
+  async componentDidMount() {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/questions`
+      );
+      const json = await res.data;
+
+      const questions = this.shuffleQandA(json);
+      console.log(questions);
+
+      this.setState(
+        {
+          questions,
+          isLoading: false
+        },
+        () => {
+          const {
+            questions,
+            currentQuestion,
+            prevQuestion,
+            nextQuestion,
+          } = this.state;
+          this.displayQuestionAndOptions(
+
+            questions,
+            currentQuestion,
+            prevQuestion,
+            nextQuestion
+          );
+          this.startTimer();
+
+
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   componentWillUnmount() {
@@ -131,10 +173,10 @@ class Play extends Component {
   shuffleQandA = (questionsData) => {
     let questions = [];
     let options = [];
-  
+
     // Shuffles questions
     questionsData.sort(() => Math.random() - 0.5);
-   
+
     for (let i in questionsData) {
       let item = questionsData[i];
 
@@ -142,7 +184,6 @@ class Play extends Component {
 
       // Shuffle answers
       options.sort(() => Math.random() - 0.5);
-
 
       questions.push({
         question: item.question,
@@ -162,7 +203,6 @@ class Play extends Component {
     if (!this.isLastQuestion()) {
       const {indexOfAnswer} = this.state;
       if (parseInt(e.target.id) === indexOfAnswer) {
-        
         this.correctAnswerSound.current.play();
         this.correctAnswer(true);
       } else {
@@ -392,7 +432,7 @@ class Play extends Component {
             areWrongAnswers,
           }),
           () => {
-            console.log(this.state.currentQuestionIndex);
+            // console.log(this.state.currentQuestionIndex);
             this.displayQuestionAndOptions(
               this.state.questions,
               this.state.currentQuestion,
@@ -508,6 +548,7 @@ class Play extends Component {
 
   render() {
     const {
+      isLoading,
       questions,
       currentQuestion,
       numOfQuestions,
@@ -536,17 +577,17 @@ class Play extends Component {
               ref={this.tenSecondCountdownSound}
               src={tenSecondCountdownSound}
             ></audio>
-            <audio ref={this.hintSound} id="hintSound" src={hintSound}></audio>
+            <audio ref={this.hintSound} id='hintSound' src={hintSound}></audio>
             <audio ref={this.fiftyFifySound} src={fiftyFifySound}></audio>
             <audio ref={this.endOfQuizSound} src={endOfQuizSound}></audio>
           </Fragment>
-          <div className="quiz noselect">
-            <h2 className="quiz-title">InstaQuiz</h2>
+          <div className='quiz noselect'>
+            <h2 className='quiz-title'>InstaQuiz</h2>
 
-            <div id="create"></div>
+            <div id='create'></div>
 
-            <div className="top-panel">
-              <div className="lifeline-container">
+            <div className='top-panel'>
+              <div className='lifeline-container'>
                 <p>
                   <FontAwesomeIcon
                     onClick={this.handleFiftyFify}
@@ -559,7 +600,7 @@ class Play extends Component {
                     onClick={this.handleFiftyFify}
                     className={`icons fifty-fifty-icon ${fiftyFifty === 0 ? "empty" : ""}`}
                   /> */}
-                  <span className="lifeline-no">{fiftyFifty}</span>
+                  <span className='lifeline-no'>{fiftyFifty}</span>
                 </p>
                 <p>
                   {' '}
@@ -567,65 +608,75 @@ class Play extends Component {
                     onClick={this.handleHints}
                     className={`icons hints-icon ${hints === 0 ? 'empty' : ''}`}
                   />
-                  <span className="lifeline-no">{hints}</span>
+                  <span className='lifeline-no'>{hints}</span>
                 </p>
               </div>
 
-              <div className="info-container">
+              <div className='info-container'>
                 <p>
-                  <span id="question-counter">
+                  <span id='question-counter'>
                     {currentQuestionIndex + 1} / {numOfQuestions}
                   </span>
                 </p>
                 <p>
-                  <span id="timer-no">
+                  <span id='timer-no'>
                     {time.minutes}:{time.seconds < 10 ? '0' : ''}
                     {time.seconds}
                   </span>
 
-                  <AvTimer className="timer-icon" />
+                  <AvTimer className='timer-icon' />
                 </p>
               </div>
             </div>
 
-            <h4 className="question">{currentQuestion.question}</h4>
+            {!isLoading && (
+              <>
+                <h4 className='question'>{currentQuestion.question}</h4>
+                <div className='options-container'>
+                  <div className='column'>
+                    <p
+                      id='0'
+                      onClick={this.handleOptionClick}
+                      className={`option ${
+                        areWrongAnswers.A ? 'wrongAnswer' : ''
+                      }`}
+                    >
+                      {questions[currentQuestionIndex].options[0]}
+                    </p>
+                    <p
+                      id='1'
+                      onClick={this.handleOptionClick}
+                      className={`option ${
+                        areWrongAnswers.B ? 'wrongAnswer' : ''
+                      }`}
+                    >
+                      {questions[currentQuestionIndex].options[1]}
+                    </p>
+                  </div>
 
-
-            <div className="options-container">
-              <div className="column">
-                <p
-                  id="0"
-                  onClick={this.handleOptionClick}
-                  className={`option ${areWrongAnswers.A ? 'wrongAnswer' : ''}`}
-                >
-                  {questions[currentQuestionIndex].options[0]}
-                </p>
-                <p
-                  id="1"
-                  onClick={this.handleOptionClick}
-                  className={`option ${areWrongAnswers.B ? 'wrongAnswer' : ''}`}
-                >
-                  {questions[currentQuestionIndex].options[1]}
-                </p>
-              </div>
-
-              <div className="column">
-                <p
-                  id="2"
-                  onClick={this.handleOptionClick}
-                  className={`option ${areWrongAnswers.C ? 'wrongAnswer' : ''}`}
-                >
-                  {questions[currentQuestionIndex].options[2]}
-                </p>
-                <p
-                  id="3"
-                  onClick={this.handleOptionClick}
-                  className={`option ${areWrongAnswers.D ? 'wrongAnswer' : ''}`}
-                >
-                  {questions[currentQuestionIndex].options[3]}
-                </p>
-              </div>
-            </div>
+                  <div className='column'>
+                    <p
+                      id='2'
+                      onClick={this.handleOptionClick}
+                      className={`option ${
+                        areWrongAnswers.C ? 'wrongAnswer' : ''
+                      }`}
+                    >
+                      {questions[currentQuestionIndex].options[2]}
+                    </p>
+                    <p
+                      id='3'
+                      onClick={this.handleOptionClick}
+                      className={`option ${
+                        areWrongAnswers.D ? 'wrongAnswer' : ''
+                      }`}
+                    >
+                      {questions[currentQuestionIndex].options[3]}
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* <div className="btn-container">
               <button
